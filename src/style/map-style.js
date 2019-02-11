@@ -4,9 +4,9 @@ import { getStopsForMetric } from '../constants/dataOptions';
 
 const noDataFill = "#cccccc";
 
-const getFillStyle = (dataProp) => {
+const getFillStyle = (dataProp, mapColors) => {
   const metric = dataProp.split('_')[1];
-  const stops = getStopsForMetric(metric).reduce(
+  const stops = getStopsForMetric(metric, mapColors).reduce(
     (acc, curr) => [ ...acc, ...curr ], []
   );
   return [ 
@@ -23,14 +23,14 @@ const getFillStyle = (dataProp) => {
   ]
 }
 
-export const getDotLayer = (region, dataProp) => fromJS({
+export const getDotLayer = (region, dataProp, mapColors) => fromJS({
   id: 'dots',
   source: 'composite',
   'source-layer': region,
   type: 'circle',
   interactive: true,
   paint: {
-    'circle-color': getFillStyle(dataProp),
+    'circle-color': getFillStyle(dataProp, mapColors),
     'circle-opacity': 0.8,
     'circle-radius': [
       "interpolate",
@@ -54,26 +54,26 @@ export const getDotLayer = (region, dataProp) => fromJS({
   }
 });
 
-export const getChoroplethLayer = (region, dataProp) => fromJS({
+export const getChoroplethLayer = (region, dataProp, mapColors) => fromJS({
   id: 'choropleth',
   source: 'composite',
   'source-layer': region,
   type: 'fill',
   interactive: true,
   paint: {
-    'fill-color': getFillStyle(dataProp),
-    'fill-opacity': 0.8
+    'fill-color': getFillStyle(dataProp, mapColors),
+    'fill-opacity': 1
   }
 });
 
-export const getBackgroundChoroplethLayer = (region, dataProp) => fromJS({
+export const getBackgroundChoroplethLayer = (region, dataProp, mapColors) => fromJS({
   id: 'choropleth',
   source: 'composite',
   'source-layer': region,
   type: 'fill',
   interactive: true,
   paint: {
-    'fill-color': getFillStyle(dataProp),
+    'fill-color': getFillStyle(dataProp, mapColors),
     'fill-opacity': [
       "interpolate",
       [ "linear" ],

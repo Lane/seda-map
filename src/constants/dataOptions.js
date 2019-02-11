@@ -1,43 +1,45 @@
+
+
 export const metrics = [
   { 
     id: 'avg',
     label: 'Average Test Scores',
     stops: [
-      [ 2, '#195BA9' ],
-      [ 3, '#2887D5' ],
-      [ 4, '#2CA0E3' ],
-      [ 5, '#28AFE1' ],
-      [ 6, '#26BAE0' ],
-      [ 7, '#26C4D1' ],
-      [ 8, '#2ACEB2' ],
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
     ]
   },
   { 
     id: 'grd',
     label: 'Growth over years',
     stops: [
-      [ 0.2, '#195BA9' ],
-      [ 0.4, '#2887D5' ],
-      [ 0.6, '#2CA0E3' ],
-      [ 0.8, '#28AFE1' ],
-      [ 1,   '#26BAE0' ],
-      [ 1.2, '#26C4D1' ],
-      [ 1.4, '#2ACEB2' ],
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1,
+      1.2,
+      1.4,
     ]
   },
   { 
     id: 'coh',
     label: 'Trend over years',
     stops: [
-      [ -0.4, '#0E3C8B' ],
-      [ -0.3, '#195BA9' ],
-      [ -0.2, '#2887D5' ],
-      [ -0.1, '#2CA0E3' ],
-      [ 0,    '#28AFE1' ],
-      [ 0.1,  '#26BAE0' ],
-      [ 0.2,  '#26C4D1' ],
-      [ 0.3,  '#2ACEB2' ],
-      [ 0.4,  '#2CD1A3' ]
+      -0.4,
+      -0.3,
+      -0.2,
+      -0.1,
+      0,   
+      0.1, 
+      0.2, 
+      0.3, 
+      0.4,
     ]
   }
 ];
@@ -96,10 +98,12 @@ export const demographics = [
   },
 ]
 
-export const getStopsForMetric = (metric) => {
+export const getStopsForMetric = (metric, colors) => {
   const match = metrics.find(m => m.id === metric);
   if (!match) { 
     throw new Error('No metric found matching ' + metric); 
   }
-  return match.stops;
+  const offset = (colors.length - match.stops.length) / 2;
+  const metricColors = colors.slice(offset, offset+match.stops.length);
+  return match.stops.map((v,i) => [ v, metricColors[i] ]);
 }

@@ -6,6 +6,7 @@ import { defaultMapStyle, getChoroplethLayer, getDotLayer, getBackgroundChorople
 import { onHoverFeature, onViewportChange, onSelectFeature } from '../../actions/mapActions';
 import { getChoroplethProperty } from '../../modules/map';
 import mapboxgl from 'mapbox-gl';
+import * as _isEqual from 'lodash.isequal';
 
 class Map extends Component {
 
@@ -47,7 +48,8 @@ class Map extends Component {
     if (
       prevProps.metric !== this.props.metric ||
       prevProps.region !== this.props.region ||
-      prevProps.demographic !== this.props.demographic
+      prevProps.demographic !== this.props.demographic ||
+      !_isEqual(prevProps.mapColors, this.props.mapColors)
     ) {
       this._updateChoropleth();
     }
@@ -60,16 +62,16 @@ class Map extends Component {
   }
 
   _updateChoropleth(init = false) {
-    const region = this.props.region;
+    const { region, mapColors, dataProp } = this.props;
     let updatedLayers;
     if (region !== 'schools') {
-      const choroplethLayer = getChoroplethLayer(region, this.props.dataProp);
+      const choroplethLayer = getChoroplethLayer(region, dataProp, mapColors);
       updatedLayers = defaultMapStyle
         .get('layers')
         .splice(2, (init ? 0 : 1), choroplethLayer)
     } else {
-      const choroplethLayer = getBackgroundChoroplethLayer('districts', this.props.dataProp);
-      const dotLayer = getDotLayer(region, this.props.dataProp);
+      const choroplethLayer = getBackgroundChoroplethLayer('districts', dataProp, mapColors);
+      const dotLayer = getDotLayer(region, dataProp, mapColors);
       updatedLayers = defaultMapStyle
         .get('layers')
         .splice(2, (init ? 0 : 1), choroplethLayer)
@@ -162,6 +164,7 @@ Map.propTypes = {
 
 const mapStateToProps = (state) => ({
   ...state.map,
+  mapColors: state.mapColors,
   dataProp: getChoroplethProperty(state.map)
 });
 

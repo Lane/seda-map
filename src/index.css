@@ -38,12 +38,9 @@ body {
 /** LAYOUTS **/
 
 /** IN DEVELOPMENT */
-.map-view__scatterplot-overlay,
-.map-view__search-overlay,
-.map-legend,
-.map-scatterplot {
+.map-view__search-overlay
+{
   background: rgba(0,0,0,0.15);
-
 }
 
 
@@ -111,7 +108,7 @@ body {
     left: 24px;
     bottom:24px;
     max-width: none;
-    width: calc(50% - 32px);
+    width: 200px;
     max-width: 640px;
   }
 }
@@ -212,8 +209,7 @@ body {
 
 .map-scatterplot {
   position:relative;
-  height:0px;
-  padding-top: 56.25%;
+  height: 588px;
 }
 
 .map-scatterplot__container {
