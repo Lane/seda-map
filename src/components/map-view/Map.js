@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { defaultMapStyle, getChoroplethLayer, getDotLayer, getBackgroundChoroplethLayer } from '../../style/map-style';
 import { onHoverFeature, onViewportChange, onSelectFeature } from '../../actions/mapActions';
 import { getChoroplethProperty } from '../../modules/map';
-import mapboxgl from 'mapbox-gl';
 import * as _isEqual from 'lodash.isequal';
 
 class Map extends Component {
@@ -85,7 +84,6 @@ class Map extends Component {
 
   _onLoad = event => {
     this.map = event.target;
-    this.map.addControl(new mapboxgl.AttributionControl(), 'top-right');
   }
 
   _onClick = event => {

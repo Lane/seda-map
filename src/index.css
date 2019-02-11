@@ -47,6 +47,7 @@ body {
 /** Map View: Search Overlay */
 
 .map-view__search-overlay {
+  display: none;
   position: absolute;
   top: 16px;
   left: 16px;
@@ -119,6 +120,15 @@ body {
 /** COMPONENTS */
 
 /** Header Component */
+
+.header {
+  position:absolute!important;
+  background:transparent!important;
+  top:0;
+  left:0;
+  right:0;
+  box-shadow: none!important
+}
 
 .header__container {
   align-items: center;
