@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 import MAP_STYLE from './style.json';
 import { getStopsForMetric } from '../constants/dataOptions';
 
-const noDataFill = "#cccccc";
+const noDataFill = "#222";
 
 const getFillStyle = (dataProp, mapColors) => {
   const metric = dataProp.split('_')[1];

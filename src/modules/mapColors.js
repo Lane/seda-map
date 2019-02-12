@@ -1,5 +1,15 @@
 const initialState = [
-  '#052458', '#1E69AD', '#48A5E8', '#D8F0F9', '#f7f7f7', '#e6f5d0', '#b8e186', '#7fbc41', '#4d9221'
+  '#33CCFF', 
+  '#30A5CF', 
+  '#2D7E9F', 
+  '#2A566E', 
+  
+  '#272F3E', 
+  
+  '#2C5C5C', 
+  '#30887A', 
+  '#35B597', 
+  '#39E1B5'
 ]
 
 const mapColors = (state = initialState, action) => {
