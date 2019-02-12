@@ -1,22 +1,11 @@
 const initialState = [
-  '#052458',
-  '#1E69AD',
-  '#48A5E8',
-  '#82C6F3', 
-  '#DDF5FE',
-  '#75E7D4',
-  '#39E1B5',
-  '#19CD9B',
-  '#03B684'
+  '#2166ac','#4393c3','#92c5de','#d1e5f0','#f7f7f7','#e6f5d0','#b8e186','#7fbc41','#4d9221'
 ]
 
 const mapColors = (state = initialState, action) => {
-  let newState;
   switch (action.type) {
     case 'UPDATE_COLOR':
-      newState = [ ...state ];
-      newState[action.index] = action.color;
-      return newState;
+      return action.colors;
     default:
       return state;
   }

@@ -33,8 +33,7 @@ export const onRemoveSelectedFeature = (feature) => ({
   feature
 });
 
-export const onColorChange = (i, color) => ({
+export const onColorChange = (colors) => ({
   type: 'UPDATE_COLOR',
-  index: i,
-  color
+  colors
 })

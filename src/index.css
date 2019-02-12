@@ -108,7 +108,7 @@ body {
     left: 24px;
     bottom:24px;
     max-width: none;
-    width: 200px;
+    width: 50%;
     max-width: 640px;
   }
 }
@@ -209,7 +209,7 @@ body {
 
 .map-scatterplot {
   position:relative;
-  height: 588px;
+  height: 80px;
 }
 
 .map-scatterplot__container {
