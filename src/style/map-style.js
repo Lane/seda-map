@@ -75,7 +75,7 @@ export const getChoroplethOutline = (region) => fromJS({
 
 const getHeightStops = (dataProp) => {
   const stops = getStopsForMetric(dataProp.split('_')[1]);
-  return stops.map((s,i) => [ s[0], 10000*i ])
+  return stops.map((s,i) => [ s[0], 1000*(i*i) ])
 }
 
 export const getChoroplethExtrude = (region, dataProp) => fromJS({
