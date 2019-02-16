@@ -73,6 +73,27 @@ export const getChoroplethOutline = (region) => fromJS({
   }
 })
 
+const getHeightStops = (dataProp) => {
+  const stops = getStopsForMetric(dataProp.split('_')[1]);
+  return stops.map((s,i) => [ s[0], 10000*i ])
+}
+
+export const getChoroplethExtrude = (region, dataProp) => fromJS({
+  id: 'choropleth-extrude',
+  source: 'composite',
+  'source-layer': region,
+  type: 'fill-extrusion',
+  paint: {
+    'fill-extrusion-color': getFillStyle(dataProp),
+    'fill-extrusion-height': {
+      property: dataProp,
+      stops: getHeightStops(dataProp)
+    },
+    'fill-extrusion-base': 0,
+    'fill-extrusion-opacity': 1
+  }
+})
+
 export const getChoroplethLayer = (region, dataProp) => fromJS({
   id: 'choropleth',
   source: 'composite',
