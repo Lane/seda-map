@@ -2615,7 +2615,7 @@
                 "text-transform": "uppercase",
                 "text-font": [
                     "DIN Offc Pro Medium",
-                    "Arial Unicode MS Medium"
+                    "Arial Unicode MS Regular"
                 ],
                 "text-letter-spacing": [
                     "match",
