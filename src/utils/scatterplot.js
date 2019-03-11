@@ -2,12 +2,12 @@ import * as merge from 'lodash.merge';
 import axios from 'axios';
 import { parse } from 'papaparse';
 
-// load endpoint from env variable or use fallback
+/** load endpoint from env variable or use fallback */
 const endpoint = process.env.REACT_APP_VARS_ENDPOINT ||
   'http://seda-data.s3-website-us-east-1.amazonaws.com/build/dev/scatterplot/';
 
+/** variables that are part of the base scatterplot file */ 
 const baseVars = ['id', 'name', 'lat', 'lon', 'all_ses', 'all_avg', 'sz' ];
-
 
 /** Default options for scatterplot container */
 const containerOptions = {
@@ -62,7 +62,8 @@ const yAxisOptions = {
     showMaxLabel: true,
     showMinLabel: true,
     color: '#999',
-    fontSize: 12
+    fontSize: 12,
+    align: 'right',
   }
 };
 

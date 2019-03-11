@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactEcharts from 'echarts-for-react';
-import { scatterOptions } from '../../constants/scatterOptions';
 import { getScatterplotConfig, getScatterplotData } from '../../utils/scatterplot';
 import * as _isEqual from 'lodash.isequal';
 import * as scale from 'd3-scale';
@@ -126,7 +125,7 @@ export class Scatterplot extends Component {
   _getBaseSeries() {
     const { data, xVar, yVar, zVar } = this.props;
     const sizeScale = 
-      getDataScale(data[zVar], { range: [ 5, 40 ] });
+      getDataScale(data[zVar], { range: [ 6, 48 ] });
     const scatterData = 
       getScatterplotData(data[xVar], data[yVar], data[zVar]);
     return {
@@ -167,7 +166,6 @@ export class Scatterplot extends Component {
     const { options } = this.props;
     const series = this._getScatterplotSeries()
     const fullOptions = { 
-      ...scatterOptions, 
       ...options,
       series
     };

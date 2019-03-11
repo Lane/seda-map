@@ -33,7 +33,6 @@ const isLoading = (state = false, action) => {
 const errorMessage = (state = null, action) => {
   switch(action.type) {
     case 'FETCH_VAR_REQUEST':
-      return null
     case 'FETCH_VAR_SUCCESS':
       return null
     case 'FETCH_VAR_ERROR':

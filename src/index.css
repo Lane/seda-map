@@ -40,28 +40,37 @@ body {
 @media(min-width: 960px) {
   .map-view__container {
     overflow:hidden;
+    top:80px;
+    bottom: 80px;
+    height:auto;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
   }
 }
 
 /** Map View: Search Overlay */
 
-.map-view__map {
+.map-view__scatterplot-overlay {
   position:fixed;
   width:100%;
   top:56px;
   left:0;
   bottom:92px;
   right:0;
-  border-bottom: 1px solid #ccc;
-  overflow:hidden;
+  background:#fff;
+  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
 }
 
 @media(min-width: 960px) {
-  .map-view__map {
+  .map-view__scatterplot-overlay {
     position: absolute;
     top:0;left:0;bottom:0;
     right:0;
-    width: calc(100% - 420px);
+    width: 50vw;
   }
 }
 
@@ -89,7 +98,7 @@ body {
   .map-view__search-overlay {
     position:absolute;
     top: 24px;
-    right:auto;
+    left:auto;
     width:100%;
   }
 }
@@ -97,23 +106,19 @@ body {
 
 /** Map View: Scatterplot Overlay */
 
-.map-view__scatterplot-overlay {
+.map-view__map {
   position: relative;
   top:100%;
   max-width: 420px;
   min-height: calc(100vh + 160px);
   margin:auto;
   margin-top: -96px;
-  background:#fff;
-  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: stretch;
+  overflow:hidden;
+
 }
 
 @media(min-width: 600px) {
-  .map-view__scatterplot-overlay {
+  .map-view__map {
     margin-top: -120px;
     min-height: calc(100vh - 160px);
   }
@@ -121,14 +126,15 @@ body {
 
 
 @media(min-width: 960px) {
-  .map-view__scatterplot-overlay {
+  .map-view__map {
     position:absolute;
     left:auto;
     right: 0px;
     bottom:0px;
     top:0;
     margin-top:0;
-    width:420px;
+    max-width: none;
+    width: 50vw;
     min-height: 1px;
   }
 }
@@ -223,11 +229,11 @@ body {
 
 .map__zoom {
   position:absolute;
-  top:0;
-  bottom:0;
+  top:auto;
+  bottom:24px;
   right: 24px;
+  left:auto;
   margin:auto;
-  height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -235,8 +241,9 @@ body {
 
 @media(min-width: 960px) {
   .map__zoom {
-    left:24px;
-    right:auto;
+    right:24px;
+    left:auto;
+    top:auto;
   }
 }
 
@@ -322,6 +329,7 @@ body {
 /** Map Controls Component */
 
 .map-controls {
+  display:none;
   position:relative;
   padding: 16px;
   z-index: 100;
@@ -340,11 +348,13 @@ body {
 
 .map-scatterplot {
   position:relative;
-  min-height: 300px;
+  min-height: 66vh;
   flex-grow:1;
+  flex-shrink:0;
 }
 
 .map-scatterplot__header {
+  display: none;
   position:absolute;
   top:0;
   left:0;
@@ -352,7 +362,7 @@ body {
   width:100%;
   padding: 16px;
   text-align:center;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #efefef;
@@ -373,7 +383,7 @@ body {
 .map-scatterplot__container {
   position:absolute;
   width:100%;
-  top:64px;
+  top:0px;
   left:0;
   right:0;
   bottom:0;
@@ -385,10 +395,10 @@ body {
   width:16px;
   top:24px;
   bottom:40px;
-  left: -16px;
+  right: -16px;
   box-shadow: 0 0 0 4px #fff,
-              8px -4px 0 #fff,
-              8px 4px 0 #fff,
+              -8px -4px 0 #fff,
+              -8px 4px 0 #fff,
               0px 1px 5px 4px rgba(0,0,0,0.2), 
               0px 2px 2px 4px rgba(0,0,0,0.14);
 }
@@ -428,14 +438,16 @@ body {
   display:flex;
   align-items: stretch;
   justify-content: flex-start;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .map-locations ul li {
   position:relative;
   border-radius: 2px;
-  padding: 4px 8px;
+  padding: 4px 0px 4px 8px;
   font-size: 12px;
   margin: 0 8px 0 8px;
+  width: 45%;
 }
 .map-locations ul li div:first-child {
   margin-right:0;

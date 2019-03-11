@@ -61,8 +61,9 @@ export class MapScatterplot extends Component {
     const { yRange } = this.props;
     return {
       visualMap: this._getVisualMapOverrides(),
+      grid: scatterOptions.grid,
       xAxis: scatterOptions.xAxis,
-      yAxis: { ...yRange, splitNumber: 7 },
+      yAxis: { ...yRange, splitNumber: 7, position: 'right' },
     }
   }
 
@@ -172,7 +173,7 @@ const mapStateToProps = (
   return ({
     region,
     yVar: demographic + '_' + metric,
-    xVar: 'all_ses',
+    xVar: demographic + '_' + 'ses',
     zVar: 'sz',
     yRange: getPaddedMinMax(metrics, metric, 0),
     stops: getPaddedStops(getStops(metrics, metric), 0), 
