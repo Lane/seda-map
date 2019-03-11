@@ -9,7 +9,8 @@ class Hint extends React.Component {
   };
 
   handlePopoverOpen = event => {
-    document.body.style.cursor = "help";
+    document.body.style.cursor = this.props.cursor ? 
+      this.props.cursor : "help";
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -19,7 +20,7 @@ class Hint extends React.Component {
   };
 
   render() {
-    const { children, text } = this.props;
+    const { children, text, cursor, ...other } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -30,6 +31,7 @@ class Hint extends React.Component {
         aria-haspopup="true"
         onMouseEnter={this.handlePopoverOpen}
         onMouseLeave={this.handlePopoverClose}
+        {...other}
       >
         {children}
         <Popover
@@ -60,6 +62,7 @@ class Hint extends React.Component {
 
 Hint.propTypes = {
   text: PropTypes.string,
+  cursor: PropTypes.text,
 };
 
 export default Hint;

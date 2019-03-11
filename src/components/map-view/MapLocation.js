@@ -5,7 +5,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import MenuItem from '@material-ui/core/MenuItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Button } from '@material-ui/core';
 
 const MapLocation = ({ 
   name, 
@@ -29,15 +28,7 @@ const MapLocation = ({
           inset 
           primary={name}>
         </ListItemText>
-        <Button
-          size="small"
-          color="primary"
-          variant="outlined"
-          classes={
-            {root: 'map-location__report-button'}
-          }
-          onClick={onReportClick}
-        >View Report</Button>
+       
         <IconButton 
           size="small"
           classes={

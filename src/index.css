@@ -23,6 +23,11 @@ body {
   height: 100%;
 }
 
+.map-view {
+  overflow: auto;
+  height: auto;
+}
+
 .app__container {
   display: flex;
   flex-direction: column;
@@ -39,24 +44,35 @@ body {
 
 @media(min-width: 960px) {
   .map-view__container {
-    overflow:hidden;
-    top:80px;
-    bottom: 80px;
-    height:auto;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    position: sticky;
+    top: 96px;
+    height: calc(100% - 160px);
+    z-index:1;
   }
+}
+
+.map-view__header {
+  position:sticky;
+  top: 0px;
+  left:0;
+  right:0;
+  display: flex;
+  align-content:center;
+  justify-content: space-between;
+  margin:auto;
+  padding: 24px 24px 16px 24px;
+  z-index: 10;
 }
 
 /** Map View: Search Overlay */
 
 .map-view__scatterplot-overlay {
-  position:fixed;
   width:100%;
   top:56px;
   left:0;
   bottom:92px;
   right:0;
+  z-index: 200;
   background:#fff;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
   display: flex;
@@ -130,16 +146,29 @@ body {
     position:absolute;
     left:auto;
     right: 0px;
-    bottom:0px;
-    top:0;
+    bottom:12px;
+    top:12px;
     margin-top:0;
     max-width: none;
     width: 50vw;
     min-height: 1px;
   }
+  .map-view__map:after {
+    position:absolute;
+    z-index:100;
+    pointer-events:none;
+    content: '';
+    top:0;bottom:0;left:-8px;right:0;
+    display:block;
+    box-shadow: inset 4px 0px 3px rgba(0,0,0,0.64)
+  }
 }
 
 /** Map View: Report Card */
+
+.map-view__report-card {
+
+}
 
 .map-view__report-card {
   display: none;
@@ -149,13 +178,14 @@ body {
   transition: all 0.4s ease;
   position: relative;
   top: 0;
-  bottom: 0;
+  bottom: 0; 
   right: 0;
   height: auto;
   width: 100%;
   transform: translate(0, 0);
   z-index:1;
   opacity:0;
+  
 }
 
 .map-view__report-card--visible {
@@ -174,19 +204,20 @@ body {
   .map-view__report-card {
     display:block;
     position:absolute;
-    transform: translate(100%, 0);
-    top:0;
-    bottom:0;
+    transform: translate(0%, 100%);
+    top:64px;
+    bottom: auto;
     max-width: none;
-    width: 452px;
-    margin-top: -112px;
-    height:100%;
+    width: calc(50vw - 80px);
+    height: auto;
     margin:auto;
+    margin-bottom: 80px;
+
     left:auto;
-    right:0;
+    right:24px;
   }
   .map-view__report-card--visible {
-    transform: translate(0, 0);
+    transform: translate(0, 70%);
     
   }
 }
@@ -230,7 +261,9 @@ body {
 .map__zoom {
   position:absolute;
   top:auto;
-  bottom:24px;
+  bottom:0px;
+  top:0px;
+  height:100%;
   right: 24px;
   left:auto;
   margin:auto;
@@ -329,20 +362,22 @@ body {
 /** Map Controls Component */
 
 .map-controls {
-  display:none;
-  position:relative;
+  position:absolute;
   padding: 16px;
   z-index: 100;
+  width: calc(50vw - 80px);
 }
 
-/* @media(min-width: 1200px) {
+@media(min-width: 960px) {
   .map-controls {
-    height: 72px;
-    background:none;
-    box-shadow: none;
-    padding:0;
+    right:24px;
+    top:24px;
+    background: #fff;
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+
   }
-} */
+}
+
 
 /** Map Scatterplot Component **/
 
@@ -354,31 +389,26 @@ body {
 }
 
 .map-scatterplot__header {
-  display: none;
   position:absolute;
-  top:0;
+  top:0px;
   left:0;
-  right:0;
+  right:auto;
+  z-index:10;
   width:100%;
-  padding: 16px;
-  text-align:center;
-  display: none;
+  padding: 16px 24px;
+  text-align:left;
   align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #efefef;
+  justify-content: flex-start;
   line-height: 1.42;
 }
 
 .map-scatterplot__header p {
-  text-align: center;
+  text-align: left;
   margin:0;
+  display: inline-block;
+  background:#fff;
 }
 
-.map-scatterplot__header span {
-  border-bottom: 2px dotted #8dd7d3;
-  font-weight:bold;
-  color: #364e9f;
-}
 
 .map-scatterplot__container {
   position:absolute;
@@ -406,17 +436,18 @@ body {
 
 /** Map Locations Component **/
 
-.map-view__locations {
-  position: absolute;
-  right: 24px;
-  top: 24px;
-  z-index: 100;
-  background:#fff;
-  box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+.map-locations {
+  position:absolute;
+  left:24px;
+  top:32px;
+  background:rgba(255,255,255,0.666);
+  border: 1px solid #e0e0e0;
+  padding: 8px;
+  max-width: 296px;
 }
 
 .map-location {
-  padding: 16px;
+  width: 100%;
 }
 
 .map-location .map-location__report-button {
@@ -438,22 +469,23 @@ body {
   display:flex;
   align-items: stretch;
   justify-content: flex-start;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  padding:0;
+  margin:0;
 }
 .map-locations ul li {
   position:relative;
   border-radius: 2px;
   padding: 4px 0px 4px 8px;
   font-size: 12px;
-  margin: 0 8px 0 8px;
-  width: 45%;
+  margin: 0;
+  width: auto;
 }
 .map-locations ul li div:first-child {
   margin-right:0;
 }
 .map-locations ul li div:nth-child(2) {
-  padding-right:24px;
+  padding-right:0px;
   padding-left:8px;
 }
 .map-locations ul li div:nth-child(2) span {
@@ -495,19 +527,6 @@ body {
   padding:8px 24px;
 }
 
-@media(min-width: 960px) {
-  .report-card__header {
-    position:absolute;
-  }
-  .report-card__body {
-    position: absolute;
-    top:80px;
-    left:0;
-    right:0;
-    bottom:0;
-    overflow: auto;
-  }
-}
 
 
 
@@ -533,7 +552,7 @@ body {
   padding: 8px;
   background: rgba(0, 0, 0, 0.8);
   color: #fff;
-  max-width: 300px;
+  max-width: 188px;
   font-size: 10px;
   z-index: 9;
   margin-top: -20px;
@@ -541,7 +560,7 @@ body {
   transform: translate(-50%, -100%);
   border-radius:2px;
   pointer-events: none;
-  text-align: center;
+  text-align: left;
   font-size: 12px;
 }
 .tooltip:after {
@@ -558,9 +577,9 @@ body {
 }
 
 .tooltip__title {
-  line-height: 1;
+  line-height: 1.2;
   font-weight: bold;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 /* .mapboxgl-ctrl-bottom-left {
@@ -570,21 +589,33 @@ body {
   bottom: auto!important;
 } */
 
-.ais-InstantSearch__root {
-  
+.map-header {
+  display: flex;
+  align-items: center;
+}
+
+
+.map-search-wrapper {
+  z-index: 10;
+  height: 56px;
+  margin-left:auto;
+  width: 400px;
+  max-width: calc(50vw - 80px);
 }
 
 .ais-SearchBox {
+  position:relative;
   box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
   background: #fff;
+  margin:auto;
 }
 
 .ais-SearchBox-input {
   border: none;
-  height:40px;
-  padding:8px;
+  height:56px;
+  padding:8px 16px;
   width:100%;
-  font-size: 16px;
+  font-size: 18px;
   width: calc(100% - 40px)
 }
 
@@ -592,8 +623,8 @@ body {
   position:absolute;
   background: none;
   border:none;
-  right: 8px;
-  top:10px;
+  right: 16px;
+  top:19px;
 }
 
 .ais-SearchBox-submitIcon {
@@ -651,8 +682,29 @@ body {
 }
 
 
-.map-scatterplot__header .hint__text {
+.hint__text {
   display: inline-block;
-  height: 24px;
-  margin-bottom: -2px;
+  height: 28px;
+  border-bottom: 2px dotted #8dd7d3;
+  font-weight:bold;
+  color: #364e9f;
+}
+
+.map-scatterplot__hint {
+  position: absolute;
+  bottom: 16px;
+  left: 24px;
+}
+
+/** TEMPORARY **/
+
+p.tmp__axis-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position:absolute;
+  left:24px;
+  right:24px;
+  bottom: 56px;
+  font-size: 11px;
 }

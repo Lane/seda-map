@@ -27,3 +27,15 @@ export const getRegionFromId = (id) => {
   return idLengths[id.length]
 }
 
+export const getSingularRegion = (region) => {
+  switch(region) {
+    case 'districts':
+      return 'school district'
+    case 'counties':
+      return 'county'
+    case 'schools':
+      return 'school'
+    default:
+      throw new Error(`region ${region} does not have singular`)
+  }
+}

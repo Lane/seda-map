@@ -4,6 +4,7 @@ export const metrics = [
     id: 'avg',
     label: 'Average Test Scores',
     short_label: 'Avg. Test Score',
+    description: 'Average test scores show the eductional opportunity for a region and if students are scoring above or below their grade level.',
     stops: [
       [ 2.5,  '#312B88' ],
       [ 3.25, '#6634C2' ],
@@ -19,6 +20,7 @@ export const metrics = [
   { 
     id: 'grd',
     label: 'Growth over years',
+    description: 'Growth rates show how many grade levels the average student improves by each year',
     short_label: 'Growth Rate',
     stops: [
       [ 0.6, '#312B88' ],
@@ -35,6 +37,7 @@ export const metrics = [
   { 
     id: 'coh',
     label: 'Trend over years',
+    description: 'The trend rate shows how test scores are rising or falling over time',
     short_label: 'Trend',
     stops: [
       [ -0.3, '#312B88' ],
@@ -59,7 +62,7 @@ export const regions = [
   },
   {
     id: 'districts',
-    label: 'Districts'
+    label: 'School Districts'
   },
   {
     id: 'schools',

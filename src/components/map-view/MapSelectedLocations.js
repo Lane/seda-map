@@ -8,6 +8,7 @@ import { onRemoveSelectedFeature, onViewportChange, showReportCard, hideReportCa
 import MenuList from '@material-ui/core/MenuList';
 import { getLocationFromFeature, parseLocationsString } from '../../modules/router';
 import { onHoverFeature, onCoordsChange } from '../../actions/mapActions';
+import { Typography } from '@material-ui/core';
 
 
 const MapSelectedLocations = ({ 
@@ -20,21 +21,28 @@ const MapSelectedLocations = ({
 }) => {
   return (
     <div className="map-locations">
-      <MenuList>
-        {selected.map((s, i) =>
-            <MapLocation 
-              key={s.id}
-              number={i+1}
-              {...s.properties}
-              color={colors[i % colors.length]}
-              onLocationClick={() => navigateToLocation(s)}
-              onDismissClick={() => removeLocation(s)}
-              onReportClick={() => showReportCard(s.properties.id)}
-              onMouseOver={() => onHoverFeature(s) }
-              onMouseOut={() => onHoverFeature(null)}
-            /> 
-        )}
-      </MenuList>
+      { 
+        selected && selected.length ?
+          <MenuList>
+            {selected.map((s, i) =>
+                <MapLocation 
+                  key={s.id}
+                  number={i+1}
+                  {...s.properties}
+                  color={colors[i % colors.length]}
+                  onLocationClick={() => navigateToLocation(s)}
+                  onDismissClick={() => removeLocation(s)}
+                  onReportClick={() => showReportCard(s.properties.id)}
+                  onMouseOver={() => onHoverFeature(s) }
+                  onMouseOut={() => onHoverFeature(null)}
+                /> 
+            )}
+          </MenuList>
+        :
+          <Typography variant="caption">
+            Select a location from the map, scatterplot, or search to see more.
+          </Typography>
+      }
     </div>
   )
 }

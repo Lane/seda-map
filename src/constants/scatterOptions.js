@@ -3,20 +3,15 @@ export const scatterOptions = {
   grid: {
     top: '24',
     right: '32',
-    bottom: '40',
-    left: '32',
+    bottom: '80',
+    left: '24',
   },
   xAxis: {
-    name: 'Parents Socioeconomic Status',
-    min: -5,
-    max: 3,
+    splitNumber: 5,
     axisLabel: {
       formatter: function (val) {
-        if (val === 3) {
-          return 'richer →';
-        }
-        if (val === -5) {
-          return '← poorer';
+        if (val === 0) {
+          return 'average socioeconomic status'
         }
         return null;
       },

@@ -5,7 +5,6 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { scatterOptions } from '../../constants/scatterOptions';
 import { getPaddedMinMax } from '../../modules/metrics';
-import Hint from '../base/Hint';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import * as _isEqual from 'lodash.isequal';
 import { getStops } from '../../modules/metrics';
@@ -13,10 +12,14 @@ import ColorStops from './ColorStops';
 import ConnectedScatterplot from '../scatterplot/ConnectedScatterplot';
 import { onHoverFeature, onViewportChange, onCoordsChange } from '../../actions/mapActions';
 import { loadLocation } from '../../actions/featuresActions';
+import { Typography } from '@material-ui/core';
+import { getSingularRegion } from '../../utils/index'
+import { demographics } from '../../constants/dataOptions';
 
 export class MapScatterplot extends Component {
   static propTypes = {
     region: PropTypes.string,
+    demographic: PropTypes.object,
     yVar: PropTypes.string,
     xVar: PropTypes.string,
     zVar: PropTypes.string,
@@ -33,8 +36,7 @@ export class MapScatterplot extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      baseScatterplot: null,
-      overlayScatterplot: null
+      baseScatterplot: null
     }
   }
 
@@ -63,7 +65,18 @@ export class MapScatterplot extends Component {
       visualMap: this._getVisualMapOverrides(),
       grid: scatterOptions.grid,
       xAxis: scatterOptions.xAxis,
-      yAxis: { ...yRange, splitNumber: 7, position: 'right' },
+      yAxis: { 
+        ...yRange, 
+        splitNumber: 7, 
+        position: 'right',
+        axisLine: { 
+          show: true,
+          lineStyle: {
+            type: 'dashed',
+            color: '#999'
+          }
+        }
+      },
     }
   }
 
@@ -85,10 +98,12 @@ export class MapScatterplot extends Component {
 
   }
 
- _onMouseMove = (e) => {
-   this.props.onCoordsChange({
-     x: e.event.event.clientX, y: e.event.event.clientY
-   })
+  _onMouseMove = (e) => {
+    const coords = {
+      x: e.event.event.clientX, 
+      y: e.event.event.clientY
+    }
+    this.props.onCoordsChange(coords)
   }
 
   componentDidMount() {
@@ -112,16 +127,6 @@ export class MapScatterplot extends Component {
   render() {
     return (
       <div className='map-scatterplot'>
-        <div className="map-scatterplot__header">
-          <p>
-            Displaying {' '}
-            <Hint text={this.props.metric.help}>
-              {this.props.metric.label.toLowerCase()}
-            </Hint>
-            {' '}for {' '}
-            {this.props.region}
-          </p>
-        </div>
         <div className="map-scatterplot__container">
           { this.props.stops && 
             <ColorStops 
@@ -143,6 +148,14 @@ export class MapScatterplot extends Component {
               onMouseMove={this._onMouseMove}
             /> 
           }
+          <Typography variant="body2" classes={{root: "tmp__axis-overlay" }}>
+            <span>← poorer</span>
+            <span>richer →</span>
+          </Typography>
+          <Typography classes={{root: 'map-scatterplot__hint'}} variant="caption">
+            Each circle represents {this.props.demographic.id === 'all' ? 'all' : this.props.demographic.label.toLowerCase()}
+            {' '}students in one {getSingularRegion(this.props.region)}. Larger circles represent {this.props.region} with more students.
+          </Typography>
         </div>
       </div>
     )
@@ -172,8 +185,9 @@ const mapStateToProps = (
   region = (region === 'schools' ? 'districts' : region);
   return ({
     region,
+    demographic: demographics.find(d => d.id === demographic),
     yVar: demographic + '_' + metric,
-    xVar: demographic + '_' + 'ses',
+    xVar: demographic + '_ses',
     zVar: 'sz',
     yRange: getPaddedMinMax(metrics, metric, 0),
     stops: getPaddedStops(getStops(metrics, metric), 0), 

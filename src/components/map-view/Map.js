@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { defaultMapStyle, getChoroplethLayer, getChoroplethOutline, getDotLayer, getBackgroundChoroplethLayer } from '../../style/map-style';
 import { onHoverFeature, onViewportChange, onSelectFeature, onCoordsChange } from '../../actions/mapActions';
 import { getChoroplethProperty } from '../../modules/map';
-import mapboxgl from 'mapbox-gl';
+// import mapboxgl from 'mapbox-gl';
 import { getStops } from '../../modules/metrics';
 import { isPropEqual, getRegionFromId } from '../../utils';
 import { updateViewportRoute, getViewportFromRoute } from '../../modules/router';
@@ -116,7 +116,7 @@ class Map extends Component {
 
   _onLoad = event => {
     this.map = event.target;
-    this.map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
+    // this.map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
     this._updateOutlineSelected([], this.props.selectedIds)
   }
 

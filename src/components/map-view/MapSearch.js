@@ -60,7 +60,9 @@ const Search = connect(null, mapDispatchToProps)(
   ({ selectSearchResult }) => {
     return (
       <div>
-        <SearchBox />
+        <SearchBox translations={{
+          placeholder: 'Find a school, district, city, or state',
+        }} />
         <Results onClick={(e) => {
           selectSearchResult(e);
         }} />
