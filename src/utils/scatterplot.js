@@ -7,7 +7,7 @@ const endpoint = process.env.REACT_APP_VARS_ENDPOINT ||
   'http://seda-data.s3-website-us-east-1.amazonaws.com/build/dev/scatterplot/';
 
 /** variables that are part of the base scatterplot file */ 
-const baseVars = ['id', 'name', 'lat', 'lon', 'all_ses', 'all_avg', 'sz' ];
+const baseVars = ['id', 'name', 'lat', 'lon', 'all_avg', 'all_ses', 'sz' ];
 
 /** Default options for scatterplot container */
 const containerOptions = {
