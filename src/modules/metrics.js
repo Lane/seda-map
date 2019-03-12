@@ -6,9 +6,8 @@ const initialState = {
       short_label: 'Avg. Test Score',
       description: 'Average test scores show the eductional opportunity for a region and if students are scoring above or below their grade level.',
       help: 'Average test scores for grades 3-8 explainer',
-      min: -4,
-      max: 4,
-      numSteps: 9
+      min: -3,
+      max: 3,
     },
     'grd': { 
       id: 'grd',
@@ -18,7 +17,6 @@ const initialState = {
       help: 'Growth rate explainer',
       min: 0.6,
       max: 1.4,
-      numSteps: 9
     },
     'coh': { 
       id: 'coh',
@@ -27,19 +25,16 @@ const initialState = {
       help: 'Trend over years explainer',
       min: -0.3,
       max: 0.3,
-      numSteps: 9
     }
   },
   colors: [
-    '#252D7A', 
-    '#37469C', 
-    '#3561A8', 
-    '#519DD4', 
-    '#68C5D0', 
-    '#A2E2D4', 
-    '#E5F8C1', 
-    '#F9FECC', 
-    '#FFFFE7' 
+    '#c51b7d',
+    '#e9a3c9',
+    '#fde0ef',
+    '#f7f7f7',
+    '#e6f5d0',
+    '#a1d76a',
+    '#4d9221',
   ]
 }
 

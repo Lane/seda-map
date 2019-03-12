@@ -1,24 +1,33 @@
 import { fromJS } from 'immutable';
 import MAP_STYLE from './style.json';
 
-const noDataFill = "#cccccc";
+const noDataFill = "rgba(0,0,0,0)";
 
 const getFillStyle = (dataProp, stops) => {
-  // combine stops into one dimensional array
-  stops = stops.reduce(
-    (acc, curr) => [ ...acc, ...curr ], []
-  );
-  return [ 
-    "case",
-    [ "has", dataProp ],
-    [
-      "interpolate", [ "linear" ],
-      [ "get", dataProp ],
-      -9999, noDataFill,
+  return {
+    property: dataProp,
+    stops: [
+      [ -9999, noDataFill ],
       ...stops
-    ],
-    noDataFill
-  ]
+    ]
+  }
+  // combine stops into one dimensional array
+
+  // stops = stops.reduce(
+  //   (acc, curr) => [ ...acc, ...curr ], []
+  // );
+
+  // return [ 
+  //   "case",
+  //   [ "has", dataProp ],
+  //   [
+  //     "interpolate", [ "linear" ],
+  //     [ "get", dataProp ],
+  //     -9999, noDataFill,
+  //     ...stops
+  //   ],
+  //   noDataFill
+  // ]
 }
 
 export const getDotLayer = (region, dataProp, stops) => fromJS({

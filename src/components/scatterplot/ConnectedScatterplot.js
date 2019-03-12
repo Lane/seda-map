@@ -31,7 +31,7 @@ export class ConnectedScatterplot extends Component {
     onMouseMove: PropTypes.func,
     loadVarsForRegion: PropTypes.func,
     data: PropTypes.object,
-    hoveredId: PropTypes.string,
+    hovered: PropTypes.string,
     selected: PropTypes.array,
     selectedColors: PropTypes.array
   }
@@ -46,7 +46,7 @@ export class ConnectedScatterplot extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { region, xVar, yVar, zVar, hoveredId } = this.props;    
+    const { region, xVar, yVar, zVar, hovered } = this.props;    
     // load data if needed
     if (
       prevProps.region !== region ||
@@ -57,10 +57,10 @@ export class ConnectedScatterplot extends Component {
       this._loadScatterplotData();
     }
     // update highlighted dots when hovered changes
-    if (prevProps.hoveredId !== hoveredId) {
-      this._toggleHighlight(prevProps.hoveredId, { show: false })
-      if (hoveredId) {
-        this._toggleHighlight(hoveredId, { show: true });
+    if (prevProps.hovered !== hovered) {
+      this._toggleHighlight(prevProps.hovered, { show: false })
+      if (hovered) {
+        this._toggleHighlight(hovered, { show: true });
       }
     }
   }
@@ -187,7 +187,7 @@ const mapStateToProps = (
 ) => { 
   return ({
     data: data[region],
-    hoveredId: feature && feature.properties && feature.properties.id ?
+    hovered: feature && feature.properties && feature.properties.id ?
       feature.properties.id : null,
     selected: selected[region],
     selectedColors: selected.colors
