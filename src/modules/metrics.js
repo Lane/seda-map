@@ -8,6 +8,7 @@ const initialState = {
       help: 'Average test scores for grades 3-8 explainer',
       min: -4,
       max: 4,
+      regions: [ 'counties', 'districts', 'schools' ],
       map: true,
       scatterplot: true,
     },
@@ -19,6 +20,7 @@ const initialState = {
       description: 'Shows how much students learn on average while they are in school',
       min: 0.4,
       max: 1.6,
+      regions: [ 'counties', 'districts', 'schools' ],
       map: true,
       scatterplot: true,
     },
@@ -29,6 +31,7 @@ const initialState = {
       description: 'Indicates the extent to which a community is getting better at providing educational opportunities over time',
       min: -0.3,
       max: 0.3,
+      regions: [ 'counties', 'districts', 'schools' ],
       map: true,
       scatterplot: true,
     },
@@ -37,6 +40,7 @@ const initialState = {
       label: 'Socioeconomic Status',
       short_label: 'SES',
       description: 'Socioeconomic status helper',
+      regions: [ 'counties', 'districts' ],
       map: false,
       scatterplot: true
     },
@@ -45,8 +49,16 @@ const initialState = {
       label: 'Segregation Measure',
       short_label: 'Segregation',
       description: 'Segregation status helper',
+      regions: [ 'counties', 'districts' ],
       map: false,
       scatterplot: true
+    },
+    'frl': {
+      id: 'frl',
+      label: 'Free reduced lunch',
+      regions: [ 'schools' ],
+      map: false,
+      scatterplot: true,
     }
   },
   colors: [

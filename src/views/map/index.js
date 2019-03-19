@@ -57,7 +57,7 @@ export class MapView extends Component {
           "map-view__report-card" +
           (reportCard ? " map-view__report-card--visible" : '')
         }>
-          <ReportCard onClose={hideReportCard} />
+          {/* <ReportCard onClose={hideReportCard} /> */}
         </div>
       </div>
     )

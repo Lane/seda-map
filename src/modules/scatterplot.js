@@ -1,5 +1,18 @@
 import { combineReducers } from "redux";
 
+
+const getPropsFromFeatures = (props, features) =>
+  props.reduce(
+    (acc, curr) => ({ 
+      ...acc, [curr]: features.reduce((obj, f) => {
+        if (f.properties[curr] && f.properties[curr] !== -9999) {
+          obj[f.properties.id] = f.properties[curr]
+        }
+        return obj
+      }, {})
+    }), {}
+  )
+
 // Reducers
 
 const data = (state = {}, action) => {
@@ -11,6 +24,13 @@ const data = (state = {}, action) => {
           ...state[action.region],
           ...action.data
         }
+      }
+    case 'LOAD_RENDERED_FEATURES':
+      return {
+        ...state,
+        'schools': getPropsFromFeatures(
+          ['name', 'all_avg', 'frl_pct'], action.features
+        )
       }
     default:
       return state;

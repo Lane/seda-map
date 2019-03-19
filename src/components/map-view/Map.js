@@ -6,6 +6,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { defaultMapStyle, getChoroplethLayer, getChoroplethOutline, getDotLayer, getBackgroundChoroplethLayer } from '../../style/map-style';
 import { updateCurrentState, onHoverFeature, onViewportChange, onSelectFeature, onCoordsChange } from '../../actions/mapActions';
+import { onLoadRenderedFeatures } from '../../actions/featuresActions';
 import { getChoroplethProperty } from '../../modules/map';
 // import mapboxgl from 'mapbox-gl';
 import { getStops } from '../../modules/metrics';
@@ -13,6 +14,8 @@ import { isPropEqual, getRegionFromId, intToRegionId } from '../../utils';
 import { updateViewportRoute, getViewportFromRoute } from '../../modules/router';
 import * as _isEqual from 'lodash.isequal';
 import * as _debounce from 'lodash.debounce';
+
+
 class Map extends Component {
 
   state = {
@@ -52,6 +55,21 @@ class Map extends Component {
       }
     }
     return this.props.updateCurrentState(null)
+  }, 400)
+
+  /**
+   * Updates the current US state at the center of the map
+   */
+  _getRenderedFeatures = _debounce((vp) => {
+    if (this.map && vp.zoom > 10) {
+      const features = this._getUniqueFeatures(
+        this.map.queryRenderedFeatures(
+          {layers: [ this.props.region === 'schools' ? 'dots' : 'choropleth' ]}
+        ),
+        'id'
+      )
+      this.props.onLoadFeatures(features)
+    }
   }, 1000)
 
   /**
@@ -62,6 +80,7 @@ class Map extends Component {
     this.props.onViewportChange(vp);
     updateViewportRoute(this.props, vp);
     this._updateCurrentState(vp);
+    this._getRenderedFeatures(vp);
   }
 
   /**
@@ -180,7 +199,7 @@ class Map extends Component {
   _onClick = event => {
     const { features } = event;
     const { region } = this.props;
-    // find features for current region that wer clicked
+    // find features for current region that was clicked
     const selectedFeature = features && 
       features.find(f => (
         (region !== 'schools' && f.layer.id === 'choropleth') ||
@@ -339,6 +358,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onHoverFeature(feature)) &&
     dispatch(onCoordsChange(coords))
   ),
+  onLoadFeatures: (features) => dispatch(onLoadRenderedFeatures(features)),
   onViewportChange: (vp) => dispatch(onViewportChange(vp)),
   onSelectFeature: (feature, region) => dispatch(onSelectFeature(feature, region)),
   updateCurrentState: (stateId) => dispatch(updateCurrentState(stateId))

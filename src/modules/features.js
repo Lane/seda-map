@@ -1,4 +1,5 @@
 const features = (state = {}, action) => {
+  let merged = {};
   switch (action.type) {
     case 'ADD_SELECTED_FEATURE':
       return { 
@@ -6,13 +7,16 @@ const features = (state = {}, action) => {
         [action.feature.properties.id]: action.feature
       }
     case 'LOAD_FEATURES_SUCCESS':
-      return {
+      merged = {
         ...state,
-        ...action.features.reduce((acc, curr) => ({
-          ...acc,
-          [curr.properties.id]: curr
-        }), {})
+        ...action.features
+          .filter(f => !state[f.properties.id])
+          .reduce((acc, curr) => ({
+            ...acc,
+            [curr.properties.id]: curr
+          }), {})
       }
+      return merged
     default:
       return state;
   }

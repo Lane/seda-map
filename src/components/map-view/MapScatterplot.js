@@ -228,17 +228,16 @@ const getStateIds = (ids, fips) => {
 const mapStateToProps = (
   { map, metrics, hovered: { feature }, selected, scatterplot: { data } }, 
   { match: { params: { region, metric, demographic } } }
-) => { 
-  region = (region === 'schools' ? 'districts' : region);
+) => {
   return ({
     region,
     demographic: demographics.find(d => d.id === demographic),
-    yVar: demographic + '_' + metric,
-    xVar: demographic + '_ses',
+    yVar: region === 'schools' ? 'all_avg' : demographic + '_' + metric,
+    xVar: region === 'schools' ? 'frl_pct' : demographic + '_ses',
     zVar: 'sz',
     stops: getStops(metrics, metric), 
     colors: metrics.colors,
-    xMetric: metrics.items['ses'],
+    xMetric: region === 'schools' ? metrics.items['frl'] : metrics.items['ses'],
     yMetric: metrics.items[metric],
     selectedIds: selected[region],
     selectedColors: selected.colors,

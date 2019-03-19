@@ -11,6 +11,11 @@ const onLoadFeaturesSuccess = (features) => ({
   features
 })
 
+export const onLoadRenderedFeatures = (features) => ({
+  type: 'LOAD_RENDERED_FEATURES',
+  features
+})
+
 const onLoadFeaturesError = (error) => ({
   type: 'LOAD_FEATURES_ERROR',
   error
