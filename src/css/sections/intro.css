@@ -8,7 +8,7 @@
   background: #efefef; 
   background-image: linear-gradient(#f0f0f0 50%, #ddd);
   min-height: 440px;
-  position:fixed;
+  position:absolute;
   z-index:1;
   top:0;
   left:0;

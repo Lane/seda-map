@@ -25,14 +25,16 @@ export const SELECTED_COLORS = [
 ].reverse();
 
 export const CHOROPLETH_COLORS = [
-  '#37469C', 
-  '#3561A8', 
-  '#519DD4', 
-  '#68C5D0', 
-  '#A2E2D4', 
-  '#E5F8C1', 
-  '#F9FECC'
+  '#b2182b',
+  '#d6604d',
+  '#f4a582',
+  '#f7f7f7',
+  '#92c5de',
+  '#4393c3',
+  '#2166ac'
 ];
+
+
 
 export const METRICS = [
   {
