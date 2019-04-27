@@ -2,12 +2,14 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getRegionControl, getMetricControl, getDemographicControl, getHighlightControl } from '../../modules/controls';
-import { getDemographicIdFromVarName, getMetricIdFromVarName } from '../../modules/config';
+import { getDemographicIdFromVarName, getMetricIdFromVarName, getChoroplethColors, getValuePositionForMetric, getSelectedColors, getGapVarNameForVars } from '../../modules/config';
 import { getLang } from '../../constants/lang.js';
-import ScatterplotSection from '../base/ScatterplotSection';
 import { sectionMapDispatchToProps } from '../../actions/sectionActions';
 import { getStateFipsFromAbbr } from '../../constants/statesFips';
 import { getCards } from '../../modules/sections';
+import { getFeatureProperty } from '../../modules/features';
+import { getMapViewport } from '../../modules/map';
+import SplitSection from '../base/SplitSection';
 
 /**
  * Gets an array of controls for the section
@@ -38,16 +40,18 @@ const mapStateToProps = (
     scatterplot: { data, loaded }, 
     selected,
     features,
-    sections: { opportunity: { hovered, vars }, active  } 
+    sections: { opportunity: { hovered, vars }, active  },
+    map: { viewport, idMap } 
   },
-  { match: { params: { region, highlightedState } } }
+  { match: { params: { region, metric, demographic, highlightedState, ...params } } }
 ) => {
   region = region === 'schools' ? 'districts' : region;
   return ({
     active: Boolean(loaded['map']),
     section: {
       id: 'opportunity',
-      type: 'scatterplot',
+      type: 'map',
+      split: true,
       title: getLang('OPP_DIFF_TITLE'),
       description: getLang('OPP_DIFF_DESCRIPTION'),
       headerMenu: {
@@ -68,9 +72,29 @@ const mapStateToProps = (
       data,
       highlightedState: getStateFipsFromAbbr(highlightedState),
       variant: 'opp',
-      selected: selected && selected[region],
-      
+      selected: selected[region],
       freeze: active !== 'opportunity'
+    },
+    map: {
+      idMap,
+      region,
+      choroplethVar: getGapVarNameForVars(vars.xVar, vars.yVar),
+      hovered: getFeatureProperty(hovered, 'id'),
+      selected: selected[region],
+      colors: getSelectedColors(),
+      viewport: getMapViewport(viewport, params),
+      freeze: (active !== 'opportunity'),
+      attributionControl: true
+    },
+    legend: {
+      colors: getChoroplethColors(),
+      markerPosition: hovered && hovered.properties ?
+        getValuePositionForMetric(
+          getFeatureProperty(hovered, demographic + '_' + metric),
+          demographic + '_' + metric,
+          region
+        ) : null,
+      vertical: true
     }
   })
 } 
@@ -82,5 +106,5 @@ const mapDispatchToProps =
 export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps)
-)(ScatterplotSection)
+)(SplitSection)
 

@@ -68,7 +68,28 @@ export const getRegionById = (id) =>
 export const getGapById = (id) =>
   GAPS.find(r => r.id === id)
 
-
+export const getGapVarNameForVars = (xVar, yVar) => {
+  const gap = getDemographicIdFromVarName(xVar) +
+    getDemographicIdFromVarName(yVar)
+  const metricId = getMetricIdFromVarName(xVar)
+  switch (gap) {
+    case 'wb':
+    case 'bw':
+      return ['wb', metricId].join('_')
+    case 'wh':
+    case 'hw':
+      return ['wh', metricId].join('_')
+    case 'pnp':
+    case 'pn':
+    case 'npp':
+      return ['np', metricId].join('_')
+    case 'wa':
+    case 'aw':
+      return ['wa', metricId].join('_')
+    default:
+      return false
+  }
+}
 
 /**
  * Gets the label for the provided metric ID

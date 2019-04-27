@@ -1,7 +1,7 @@
-import { updateRoute } from "../modules/router";
+import { updateRoute, updateViewportRoute } from "../modules/router";
 import { onScatterplotData, onScatterplotLoaded } from "./scatterplotActions";
 import { loadLocation } from "./featuresActions";
-import { onRemoveSelectedFeature, onViewportChange } from "./mapActions";
+import { onRemoveSelectedFeature, onViewportChange, onCoordsChange, addToFeatureIdMap, onSelectFeature } from "./mapActions";
 import { parseLocationsString, getLocationFromFeature } from '../modules/router';
 
 export const onHoverFeature = (feature, sectionId) => ({
@@ -63,10 +63,26 @@ export const getScatterplotDispatchForSection = (dispatch, sectionId) => ({
     dispatch(loadLocation(location)),
 })
 
+export const getMapDispatchForSection = (dispatch, sectionId, ownProps) => ({
+  onMapHover: (feature, coords) => {
+    dispatch(onHoverFeature(feature, 'map'))
+    dispatch(onCoordsChange(coords))
+    dispatch(addToFeatureIdMap([ feature ]))
+  },
+  onMapViewportChange: (vp) => {
+    dispatch(onViewportChange(vp))
+    updateViewportRoute(ownProps, vp);
+  },
+  onMapClick: (feature) => 
+    dispatch(onSelectFeature(feature, ownProps.match.params.region)),
+})
+
+
 export const sectionMapDispatchToProps = (sectionId) =>
   (dispatch, ownProps) => ({
     ...getOptionsDispatchForSection(dispatch, sectionId, ownProps),
     ...getCardDispatchForSection(dispatch, sectionId),
-    ...getScatterplotDispatchForSection(dispatch, sectionId)
+    ...getScatterplotDispatchForSection(dispatch, sectionId),
+    ...getMapDispatchForSection(dispatch, sectionId, ownProps)
   })
 

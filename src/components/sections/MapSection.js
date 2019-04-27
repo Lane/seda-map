@@ -4,15 +4,14 @@ import { connect } from 'react-redux';
 
 import { getChoroplethColors, getValuePositionForMetric, getSelectedColors, isGapDemographic } from '../../modules/config';
 import { getRegionControl, getMetricControl, getDemographicGapControl, getHighlightControl } from '../../modules/controls';
-import { onHoverFeature, onViewportChange, onSelectFeature, onCoordsChange, navigateToStateByAbbr, addToFeatureIdMap } from '../../actions/mapActions';
+import { navigateToStateByAbbr } from '../../actions/mapActions';
 import { updateRoute } from '../../modules/router';
 import { getStateFipsFromAbbr } from '../../constants/statesFips';
 import { getFeatureProperty } from '../../modules/features';
 import SplitSection from '../base/SplitSection';
 import { getMapViewport } from '../../modules/map';
-import { updateViewportRoute } from '../../modules/router';
 import { getLang } from '../../constants/lang';
-import { getScatterplotDispatchForSection, getCardDispatchForSection } from '../../actions/sectionActions';
+import { getScatterplotDispatchForSection, getCardDispatchForSection, getMapDispatchForSection } from '../../actions/sectionActions';
 import { getHoveredId, getCards } from '../../modules/sections';
 
 /**
@@ -131,17 +130,7 @@ const mapStateToProps = ({
 const mapDispatchToProps = (dispatch, ownProps) => ({
   ...getCardDispatchForSection(dispatch, 'map'),
   ...getScatterplotDispatchForSection(dispatch, 'map'),
-  onMapHover: (feature, coords) => {
-    dispatch(onHoverFeature(feature, 'map'))
-    dispatch(onCoordsChange(coords))
-    dispatch(addToFeatureIdMap([ feature ]))
-  },
-  onMapViewportChange: (vp) => {
-    dispatch(onViewportChange(vp))
-    updateViewportRoute(ownProps, vp);
-  },
-  onMapClick: (feature) => 
-    dispatch(onSelectFeature(feature, ownProps.match.params.region)),
+  ...getMapDispatchForSection(dispatch, 'map', ownProps),
   onOptionChange: (id, option) => {
     switch(id) {
       case 'metric':
@@ -163,6 +152,7 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
     }
   },
 })
+
 export default compose(
   withRouter,
   connect(mapStateToProps, mapDispatchToProps)

@@ -18,10 +18,10 @@ import { updateRoute } from '../../modules/router';
 const ScrollElement = Scroll.ScrollElement;
 const ScrollLink = Scroll.Link;
 const sectionIdComponentMap = { 
-  'map': ScrollElement(MapSection), 
-  'socioeconomic': ScrollElement(SocioeconomicConditions), 
+  // 'map': ScrollElement(MapSection), 
+  // 'socioeconomic': ScrollElement(SocioeconomicConditions), 
   'opportunity': ScrollElement(OpportunityDifferences), 
-  'achievement': ScrollElement(AchievementGaps)
+  // 'achievement': ScrollElement(AchievementGaps)
 };
 
 export class MapView extends Component {
