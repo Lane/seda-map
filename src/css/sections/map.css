@@ -1,14 +1,10 @@
 
-
-.section.section--map {
-  margin-top: 80vh;
-  z-index:20;
-}
-
 @media(min-width: 960px) {
   .section.section--map {
     justify-content: stretch;
     align-items: stretch;
+    margin-top: 80vh;
+    z-index:20;
   }
 }
 

@@ -59,7 +59,16 @@
 }
 
 .card .card__button {
-  margin-top: auto;
+  position: absolute;
+  right:0;
+  bottom:-12px;
+  left:16px;
+  right:0;
+  width: 64px;
+  border-radius:2px!important;
+  height: 32px;
+  line-height:1.4;
+  font-weight: bold;
 }
 
 /** Dark overrides */

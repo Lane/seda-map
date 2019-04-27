@@ -4,12 +4,16 @@
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
-  perspective: 2px;
-  transform-style: preserve-3d; 
 }
 
-.map-tool--parallax .section.section--intro {
- top:-50px;
- transform: translateZ(-1px) scale(1.5);
- z-index: -1;
+@media(min-width: 960px) {
+  .map-tool--parallax {
+    perspective: 2px;
+    transform-style: preserve-3d; 
+  }
+  .map-tool--parallax .section.section--intro {
+    top: -50px;
+    transform: translateZ(-1px) scale(1.5);
+    z-index: -1;
+  }
 }

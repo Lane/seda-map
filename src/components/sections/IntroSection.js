@@ -39,7 +39,7 @@ function MapIntro({onMeasureClick}) {
               variant="contained" 
               color="secondary"
               classes={{root: 'card__button'}}
-            >Show Educational Opportunity</Button>
+            >Go</Button>
           </Card>
           <Card 
             title={getLang('INTRO_CARD_TITLE_GRD')}
@@ -58,7 +58,7 @@ function MapIntro({onMeasureClick}) {
               variant="contained" 
               color="secondary"
               classes={{root: 'card__button'}}
-            >Show School Quality</Button>
+            >Go</Button>
           </Card>
           <Card 
             title={getLang('INTRO_CARD_TITLE_COH')}
@@ -77,7 +77,7 @@ function MapIntro({onMeasureClick}) {
               color="secondary"
               onClick={() => onMeasureClick('coh')}
               classes={{root: 'card__button'}}
-            >Show Opportunity Changes</Button>
+            >Go</Button>
           </Card>
       </div>
       <div className="section__footer">
