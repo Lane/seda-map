@@ -389,44 +389,63 @@ const getMapTrendGapOverlay = () => getOverlay(
   }))
 )
 
-const getOpportunityAverageOverlay = () => ({
-  type: 'line',
-  animation: false,
-  silent: true,
-  visualMap: false,
-  data: [[-4, -4], [4, 4]],
-  symbolSize: 0.1,
-  label: {
-    show:false
-  },
-  itemStyle: {
-    color: '#999'
-  },
-  markLine: {
+/**
+ * Gets the overlay series fo the opportunity differences section
+ * Has a line marking where x == y and text label.
+ * @param {*} xVar 
+ */
+const getOpportunityOverlay = (xVar) => {
+  const metric = getMetricIdFromVarName(xVar);
+  // label start coordinates for the label along the line
+  const labelStart = metric === 'avg' ? [-4, -4] :
+    metric === 'grd' ? [ 0.2, 0.2 ] : [ -0.3, -0.3 ];
+  const labelEnd = metric === 'avg' ? [-2, -2] :
+    metric === 'grd' ? [ 0.6, 0.6 ] : [ -0.2, -0.2 ];
+  return {
+    type: 'line',
     animation: false,
     silent: true,
+    visualMap: false,
+    data: [[-5, -5], [5, 5]],
+    symbolSize: 0.1,
     label: {
-      position: 'middle',
-      formatter: function(value) {
-        return value.name
-      } 
+      show:false
+    },
+    itemStyle: {
+      color: '#031232',
     },
     lineStyle: {
       type: 'dashed',
-      color: '#999'
+      opacity: 0.5,
+      width:1
     },
-    data: [
-      [
-        { 
-          name: getLang('OPP_DIFF_EQUAL_LINE'), 
-          coord: [-4, -4], 
-          symbol: 'none',
+    markLine: {
+      animation: false,
+      silent: true,
+      label: {
+        position: 'middle',
+        formatter: function(value) {
+          return value.name
         },
-        { coord: [ 4,  4], symbol: 'none' },
+        color: '#031232',
+        fontSize: 12.8,
+      },
+      lineStyle: {
+        color: 'transparent'
+      },
+      data: [
+        [
+          { 
+            name: getLang('OPP_DIFF_EQUAL_LINE_' + metric.toUpperCase()), 
+            coord: labelStart, 
+            symbol: 'none',
+          },
+          { coord: labelEnd, symbol: 'none' },
+        ]
       ]
-    ]
+    }
   }
-})
+}
 
 const overlays = (variant, { xVar, yVar, region }) => {
   const yMetricId = getMetricIdFromVarName(yVar);
@@ -447,7 +466,9 @@ const overlays = (variant, { xVar, yVar, region }) => {
       else
         return [ getMapTrendOverlay(region) ]
     case 'avg_opp':
-      return [ getOpportunityAverageOverlay() ]
+    case 'grd_opp':
+    case 'coh_opp':
+      return [ getOpportunityOverlay(xVar) ]
     default:
       return []
   }
@@ -515,6 +536,7 @@ const getXAxis = ({ metric, demographic, region, ...rest }) => {
     ),
     nameTextStyle: {
       fontSize: 12.8,
+      fontWeight: 'normal',
       color: '#031232',
     },
     ...rest
