@@ -98,6 +98,13 @@ export class MapView extends Component {
     hovered: null,
   }
 
+  constructor(props) {
+    super(props);
+    this.ref = React.createRef();
+  }
+
+
+
   handleChange = (event, value) => {
     this.setState({ value });
     this.props.setMetric(value)
@@ -111,11 +118,29 @@ export class MapView extends Component {
     this.setState({hovered: null})
   }
 
+  stopScroll = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+  }
+
+  disableScroll = (el) => {
+    el.addEventListener('mousewheel', this.stopScroll);
+    el.addEventListener('DOMMouseScroll', this.stopScroll);
+  }
+
+  enableScroll = (el) => {
+    el.removeEventListener('mousewheel', this.stopScroll);
+    el.removeEventListener('DOMMouseScroll', this.stopScroll);
+  }
+
   componentDidMount() { 
     this.props.loadRouteLocations(
       this.props.match.params.locations
     );
     Scroll.scrollSpy.update();
+    this.disableScroll(this.ref.current);
+
   }
 
   componentDidUpdate(prevProps) {
@@ -126,7 +151,7 @@ export class MapView extends Component {
 
   render() {
     return (
-      <div id="scrollWrapper" className="map-tool map-tool--parallax">
+      <div id="scrollWrapper" ref={this.ref} className="map-tool map-tool--parallax">
         <div>
           <ScrollLink 
             containerId="scrollWrapper"

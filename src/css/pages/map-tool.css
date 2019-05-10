@@ -1,14 +1,21 @@
 
+
 @media(min-width: 960px) {
   .intro-spacer {
     margin-top: 100vh;
   }
 }
 
+.body {
+  width: 100%;
+  height: 100%;
+  overflow:hidden;
+}
+
 .map-tool--parallax {
   height: 100vh;
-  overflow-x: hidden;
-  overflow-y: auto;
+  width: 100%;
+  overflow:hidden;
 }
 
 @media(min-width: 960px) {

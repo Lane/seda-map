@@ -80,12 +80,7 @@ function MapIntro({onMeasureClick}) {
             >Go</Button>
           </Card>
       </div>
-      <div className="section__footer">
-        <Typography component="span" variant="button">
-        { getLang('INTRO_CARD_HINT') }
-        </Typography>
-        
-      </div>
+      <div className="section__footer"></div>
       
     </div>
   )
