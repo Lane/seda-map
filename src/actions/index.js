@@ -356,6 +356,15 @@ export const onMetricChange = (metric) => (dispatch) => {
 }
 
 /**
+ * Update the route and dispatch event to update secondary metric
+ * @param {string} secondary 
+ */
+export const onSecondaryChange = (secondary) => (dispatch) => {
+  updateRoute({ secondary })
+  dispatch(setExplorerSecondary(secondary))
+}
+
+/**
  * Update the route and dispatch the event to update metric
  */
 export const onViewChange = (view) => (dispatch) => {
@@ -410,14 +419,15 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
  * @param {*} region 
  */
 export const onRegionChange = (region) => 
-  (dispatch) => {
+  (dispatch, getState) => {
     const routeUpdates = { region };
     // set demographic to 'all' if switching to schools
     if (region === 'schools') {
       routeUpdates['demographic'] = 'all';
       routeUpdates['secondary'] = 'frl';
     } else {
-      routeUpdates['secondary'] = 'ses';
+      const secondary = getState()['sections']['gapChartX']
+      routeUpdates['secondary'] = secondary;
     }
     updateRoute(routeUpdates)
     dispatch(setExplorerRegion(region))

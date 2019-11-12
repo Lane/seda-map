@@ -39,8 +39,8 @@ const gapChart = (state = true, action) => {
 
 const gapChartX = (state = 'ses', action) => {
   switch(action.type) {
-    case 'SET_GAP_CHART_X':
-      return action.metric
+    case 'SET_EXPLORER_SECONDARY':
+      return action.secondaryId
     default:
       return state;
   }

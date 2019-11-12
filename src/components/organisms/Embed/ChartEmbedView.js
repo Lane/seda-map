@@ -102,6 +102,7 @@ function ChartEmbedView(props) {
 
   const metric = props.yVar.split('_')[1];
   const demographic = getDemographicForVarNames(props.xVar, props.yVar);
+  // TODO: get X var metric instead of default to ses
   const secondary = props.region === 'schools' ? 'frl' : 'ses';
   const explorerUrl = 'https://edopportunity.org/explorer/#/chart/' + 
     props.highlightedState + '/' +

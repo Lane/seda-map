@@ -13,7 +13,8 @@ import { onRegionChange, onDemographicChange, onHighlightedStateChange } from '.
 export const GapTypeInlineMenu = ({metric, onChange}) => {
   const options = [
     getMetricById('ses'),
-    getMetricById('seg')
+    getMetricById('seg'),
+    getMetricById('min')
   ];
   return (
     <InlineMenu

@@ -71,7 +71,6 @@ const SedaExplorerMap = ({
   const handleLoad = () => {
     window.SEDA.trigger('map');
     setTimeout(() => {
-      
       if (
         viewport.zoom === 3.5 && 
         viewport.latitude === 38 &&
@@ -79,7 +78,6 @@ const SedaExplorerMap = ({
         view === 'map'
       ) {
         // if default viewport, zoom to US
-        console.log(viewport, 'resetting')
         resetHighlightedState();
       }
     }, 1000);

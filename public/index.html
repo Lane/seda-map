@@ -922,7 +922,7 @@
         if (!params.metric || ['avg', 'grd', 'coh'].indexOf(params.metric) === -1) {
           return false;
         }
-        if (!params.secondary || ['ses', 'seg', 'frl'].indexOf(params.secondary) === -1) {
+        if (!params.secondary || ['ses', 'seg', 'min', 'frl'].indexOf(params.secondary) === -1) {
           return false;
         }
         if (

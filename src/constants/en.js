@@ -100,6 +100,7 @@ const LANG = {
   'LABEL_COH_WH': 'White / Hispanic Gap in Test Score Trends',
   'LABEL_COH_PN': 'Poor / Non-Poor Gap in Test Score Trends',
   'LABEL_COH_MF': 'Male / Female Gap in Test Score Trends',
+  'LABEL_MIN': 'exposure to minority students',
   'LABEL_SEG': 'school poverty',
   'LABEL_SEG_NP': 'poor - non-poor gap in school poverty',
   'LABEL_SEG_WB': 'Black - White gap in school poverty',
@@ -399,9 +400,9 @@ const LANG = {
 
   'AXIS_AVG_GAP_MID': 'no\ngap',
   'AXIS_AVG_GAP_LOW_SINGLE': '$[value] grade level\ndifference',
-  'AXIS_AVG_GAP_LOW': '$[value] grade level\ndifference',
+  'AXIS_AVG_GAP_LOW': '-$[value] grade level\ndifference',
   'AXIS_AVG_GAP_HIGH_SINGLE': '$[value] grade level\ndifference',
-  'AXIS_AVG_GAP_HIGH': '$[value] grade level\ndifference',
+  'AXIS_AVG_GAP_HIGH': '+$[value] grade level\ndifference',
 
   'AXIS_GRD_GAP_MID': 'no\n difference',
   'AXIS_GRD_GAP_LOW': '-$[value] grade levels\nper year difference',

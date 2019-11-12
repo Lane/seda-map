@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getMapVars, getDemographicIdFromVarName, getGapDemographics } from '../../modules/config';
 import { getStateFipsFromAbbr } from '../../constants/statesFips';
-import { loadLocation, onHoverFeature, onScatterplotData, onScatterplotLoaded, onScatterplotError } from "../../actions";
+import { loadLocation, onHoverFeature, onScatterplotData, onScatterplotLoaded, onScatterplotError, onSecondaryChange } from "../../actions";
 import Scatterplot from '../organisms/Scatterplot';
 import SedaLocationMarkers from './SedaLocationMarkers';
 import ScatterplotAxis from '../organisms/Scatterplot/ScatterplotAxis';
@@ -98,14 +98,14 @@ SedaGapChart.propTypes = {
 
 const mapStateToProps = ({ 
   scatterplot: { data },
-  sections: { hovered, gapChartX },
+  sections: { hovered },
 },
-{ match: { params: { region, metric, demographic, highlightedState } } }
+{ match: { params: { region, metric, demographic, highlightedState, secondary } } }
 ) => {
   return ({
     region,
     metric,
-    secondary: gapChartX,
+    secondary,
     demographic,
     highlightedState,
     hovered,
@@ -127,11 +127,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(loadLocation(location, 'chart')),
   onError: (e, sectionId = 'map') =>
     dispatch(onScatterplotError(e, sectionId)),
-  onSetSecondary: (metric) => {
-    dispatch({
-      type: 'SET_GAP_CHART_X',
-      metric
-    })
+  onSetSecondary: (secondary) => {
+    dispatch(onSecondaryChange(secondary))
   }
 })
 

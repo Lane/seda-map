@@ -22,7 +22,7 @@ const getSecondaryChartsForDemographic = (dem) => {
   switch (dem) {
     case 'wb':
     case 'wh':
-      return [ 'ses', 'seg' ]
+      return [ 'ses', 'seg', 'min' ]
     case 'pn':
     case 'pnp':
       return [ 'seg' ]

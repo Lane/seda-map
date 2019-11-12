@@ -121,11 +121,14 @@ export const METRICS = [
       'map_districts': [ -3.5, 3.5 ],
       'map_schools': [ -5, 5 ],
       '*_counties_np': [ -4, 3 ],
+      '*_counties_wh': [ -1.5, 4.5 ],
+      '*_districts_wh': [ -1.5, 5 ],
       '*_*_gap': [ -0.5, 5 ],
       '*_counties_b': [ -4, 2 ],
       '*_counties_w': [ -4, 4 ],
       '*_counties_a': [ -4, 5 ],
       '*_counties': [ -4.5, 2.5 ],
+
       '*_districts_b': [ -4, 3 ],
       '*_districts_w': [ -4, 4 ],
       '*_districts_a': [ -4, 5 ],
@@ -193,6 +196,14 @@ export const METRICS = [
     },
     map: false,
     scatterplot: true
+  },
+  {
+    id: 'min',
+    label: LANG['LABEL_MIN'],
+    range: {
+      '*': [ -0.1, 0.7 ],
+
+    }
   },
   {
     id: 'frl',
