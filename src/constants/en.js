@@ -100,7 +100,9 @@ const LANG = {
   'LABEL_COH_WH': 'White / Hispanic Gap in Test Score Trends',
   'LABEL_COH_PN': 'Poor / Non-Poor Gap in Test Score Trends',
   'LABEL_COH_MF': 'Male / Female Gap in Test Score Trends',
-  'LABEL_MIN': 'exposure to minority students',
+  'LABEL_MIN': 'percent minority students in schools',
+  'LABEL_MIN_WB': 'White / Black gap in Percent Minority Students in Schools',
+  'LABEL_MIN_WH': 'White / Hispanic gap in Percent Minority Students in Schools',
   'LABEL_SEG': 'school poverty',
   'LABEL_SEG_NP': 'poor - non-poor gap in school poverty',
   'LABEL_SEG_WB': 'Black - White gap in school poverty',
@@ -125,12 +127,14 @@ const LANG = {
   'LABEL_SHORT_COH': 'trend',
   'LABEL_SHORT_SES': 'SES',
   'LABEL_SHORT_FRL': 'Free Lunch',
-  'LABEL_SHORT_SEG': 'Poverty',
+  'LABEL_SHORT_SEG': '% Poverty',
+
 
   'LABEL_SHORT_AVG_GAP': 'scores',
   'LABEL_SHORT_GRD_GAP': 'rate',
   'LABEL_SHORT_COH_GAP': 'trend',
-  'LABEL_SHORT_SEG_GAP': 'Poverty',
+  'LABEL_SHORT_SEG_GAP': '% Poverty',
+  'LABEL_SHORT_MIN_GAP': '% Minority',
   'LABEL_SHORT_SES_GAP': 'SES',
 
   // Concepts that correspond to metric
@@ -347,7 +351,10 @@ const LANG = {
   'VALUE_GRD_GAP': '$[demographic1] and $[demographic2] students’ learning rates differ by $[value] per year.',
   'VALUE_COH_GAP': '$[demographic1] and $[demographic2] students’ test score trends differ by $[value] grade levels per year.',
   'VALUE_SES_GAP': '$[demographic1] students’ average socioeconomic status is $[difference] $[demographic2] students’.',
-  'VALUE_SEG_GAP': 'Poverty rate in $[demographic2] students’ schools are $[value] $[highLow] than $[demographic1] students’ schools.',
+  // 'VALUE_SEG_GAP': 'Poverty rate in $[demographic2] students’ schools are $[value] $[highLow] than $[demographic1] students’ schools.',
+  'VALUE_SEG_GAP': 'The poverty rate in $[demographic2] students’ schools is $[value] $[highLow] than in $[demographic1] students’ schools.',
+  'VALUE_MIN_GAP': 'The percent of minority students in $[demographic2] students’ schools is $[value] $[highLow] than in $[demographic1] students’ schools.',
+
 
   'DIFF_VERY_HIGH': 'much higher than',
   'DIFF_HIGH': 'higher than',
@@ -428,6 +435,9 @@ const LANG = {
   'AXIS_SEG_GAP_MID': 'no gap',
   'AXIS_SEG_LOW_GAP': 'less',
   'AXIS_SEG_HIGH_GAP': 'more',
+
+  'AXIS_MIN_GAP_MID': 'no gap',
+  'AXIS_MIN_GAP_HIGH': '$[value]',
 
   'AXIS_FRL_MID': ' ',
 
@@ -517,11 +527,15 @@ const LANG = {
 
   // SEG gaps
   'LEGEND_LOW_SEG_WB': ' ',
-  'LEGEND_HIGH_SEG_WB': 'Larger school poverty gap, favoring White families ▶',
+  'LEGEND_HIGH_SEG_WB': 'More Racial-Economic School Segregation ▶',
   'LEGEND_LOW_SEG_WH': ' ',
-  'LEGEND_HIGH_SEG_WH': 'Larger school poverty gap, favoring White families ▶',
+  'LEGEND_HIGH_SEG_WH': 'More Racial-Economic School Segregation ▶',
   'LEGEND_LOW_SEG': ' ',
-  'LEGEND_HIGH_SEG': 'Larger school poverty gap, favoring non-poor families ▶',
+  'LEGEND_HIGH_SEG': 'More Racial-Economic School Segregation ▶',
+  'LEGEND_LOW_MIN_WH': ' ',
+  'LEGEND_HIGH_MIN_WH': 'More Racial School Segregation  ▶',
+  'LEGEND_LOW_MIN_WB': ' ',
+  'LEGEND_HIGH_MIN_WB': 'More Racial School Segregation  ▶',
 
   // Map Legend
   'LEGEND_MAP_AVG_LOW': '$[value] grade levels',

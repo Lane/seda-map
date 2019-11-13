@@ -1,7 +1,7 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { getSizerFunctionForRegion, isGapVarName, getDemographicFromVarName, getMetricIdFromVarName, getMetricFromVarName, getChoroplethColors, getMetricRangeFromVarName, getMidpointForVarName, isVersusFromVarNames, getDemographicForVarNames, getFormatterForVarName } from '../../../modules/config';
 import { getLang } from '../../../modules/lang';
-import { getCSSVariable, formatNumber, formatPercentDiff } from '../../../utils';
+import { getCSSVariable, formatNumber } from '../../../utils';
 
 /** UTILS */
 
@@ -27,6 +27,9 @@ const getIncrementForVarName = (varName, region) => {
     case 'seg':
     case 'seg_gap':
       return 0.25;
+    case 'min':
+    case 'min_gap':
+      return 0.2;
     default:
       return 1;
   }
@@ -345,7 +348,7 @@ const getOverlayForVarName = (varName, axis = 'y', region) => {
   const positions = getPositionArray(numLines, inc, midPoint, range);
   const langPrefix = isGap ? metricId + '_gap' : metricId;
   const formatter = getFormatterForVarName(varName);
-  const labels = ['avg', 'grd', 'coh'].indexOf(metricId) > -1 ?
+  const labels = ['avg', 'grd', 'coh', 'min'].indexOf(metricId) > -1 ?
     createLabels(positions, langPrefix, axis, formatter, midPoint) :
     createLabels([ getMidpointForVarName(varName) ], langPrefix, axis, formatter, midPoint)
   const lines = createLines(positions, axis, midPoint)
@@ -530,28 +533,19 @@ const getXAxis = ({ metric, demographic, region, ...rest }) => {
 
 const getMapXAxis = ({ metric, demographic, region }) => {
   const [ min, max ] = getMetricRangeFromVarName([demographic.id, metric.id].join('_'), region);
+  const varName = `${demographic.id}_${metric.id}`;
+  const formatter = getFormatterForVarName(varName)
   return {
     min, 
     max,
     inverse: (region === 'schools'),
     axisLabel: {
-      show: ['avg', 'grd', 'coh'].indexOf(metric.id) === -1,
+      show: ['avg', 'grd', 'coh', 'min'].indexOf(metric.id) === -1,
       inside: false,
-      formatter: (value) => {
-        // percent for schools
-        if (region === 'schools') {
-          return (value*100)+'%'
-        }
-        // percent diff for learning rates
-        if (metric.id === 'grd') {
-          return (value > 1 ? '+' : '') +
-            formatPercentDiff(value, 1)
-        }
-        return value > 0 ? ('+' + value) : value
-      }
+      formatter: formatter
     },
     axisLine: { show: false },
-    interval: getIncrementForVarName(`${demographic.id}_${metric.id}`, region),
+    interval: getIncrementForVarName(varName, region),
     nameGap: 0,
     nameTextStyle: {},
     splitLine: { show: false },
