@@ -213,7 +213,7 @@ export const getDescriptionForVarName = (varName, value) => {
   const demographicId = getDemographicIdFromVarName(varName);
   const langKey = getDescriptionLangKey(metricId, value);
   const isGap = isGapDemographic(demographicId);
-  const formattedValue = metricId === 'seg' ? 
+  const formattedValue = metricId === 'seg' || metricId === 'min' ? 
     (
       formatter(value)[0] === '-' ? 
         formatter(value).substr(1) : formatter(value)
