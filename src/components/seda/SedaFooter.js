@@ -147,11 +147,9 @@ SedaFooter.propTypes = {
 const mapDispatchToProps = (dispatch) => ({
   onEmbed: () => {
     dispatch(toggleEmbedDialog(true))
-    dispatch(onShare(window.location.href, 'embed'))
   },
   onLinkShare: () => {
     dispatch(toggleLinkShareDialog(true))
-    dispatch(onShare(window.location.href, 'link'))
   },
   onTwitterLinkShare: (url, text) => {
     onTwitterShare(url,text)

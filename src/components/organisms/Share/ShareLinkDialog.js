@@ -12,9 +12,10 @@ import { InputAdornment, IconButton } from '@material-ui/core';
 import CopyIcon from '@material-ui/icons/FileCopy';
 import copy from 'copy-to-clipboard';
 import { toggleLinkShareDialog } from './actions';
+import { onShare } from './actions';
 
 
-export const ShareLinkDialog = ({open, shareUrl, onClose}) => {
+export const ShareLinkDialog = ({open, shareUrl, onClose, onCopy}) => {
   const [ copied, setCopied ] = React.useState(false);
 
   const handleFocus = (event) => event.target.select();
@@ -46,7 +47,7 @@ export const ShareLinkDialog = ({open, shareUrl, onClose}) => {
                 <IconButton
                   edge="end"
                   aria-label={ getLang('LINK_COPY_LABEL') }
-                  onClick={() => { copy(shareUrl); setCopied(true); }}
+                  onClick={() => { copy(shareUrl); setCopied(true); onCopy(); }}
                 >
                   <CopyIcon />
                 </IconButton>
@@ -71,7 +72,10 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  onClose: () => dispatch(toggleLinkShareDialog(false))
+  onClose: () => dispatch(toggleLinkShareDialog(false)),
+  onCopy: () => {
+    dispatch(onShare(window.location.href, 'link'));
+  }
 })
 
 export default connect(
