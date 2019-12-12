@@ -54,6 +54,7 @@ const DataOptionsDialog = ({
   region, 
   highlightedState,
   onApplySettings,
+  sizeFilter
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -61,12 +62,16 @@ const DataOptionsDialog = ({
   const [ dialogDem, setDemographic ] = React.useState(demographic);
   const [ dialogRegion, setRegion ] = React.useState(region);
   const [ dialogState, setHighlightedState ] = React.useState(highlightedState);
+  console.log('dialogState >>>>>', dialogState)
+  const [ dialogSize, setSizeFilter ] = React.useState(sizeFilter);
+  console.log('dialogSize >>>>>', dialogSize)
 
   const resetOptions = () => {
     setKeyMetric(metric);
     setDemographic(demographic);
     setRegion(region);
     setHighlightedState(highlightedState);
+    setSizeFilter(sizeFilter)
   }
 
   const handleClickOpen = () => {
@@ -82,6 +87,7 @@ const DataOptionsDialog = ({
     if (dialogDem !== demographic) { updates['demographic'] = dialogDem }
     if (dialogRegion !== region) { updates['region'] = dialogRegion }
     if (dialogState !== highlightedState) { updates['highlightedState'] = dialogState }
+    if (dialogSize !== sizeFilter) { updates['sizeFilter'] = dialogSize }
     onApplySettings(updates)
   }
 
@@ -123,9 +129,11 @@ const DataOptionsDialog = ({
           demographic={dialogDem}
           region={dialogRegion}
           highlightedState={dialogState}
+          sizeFilter={dialogSize}
           onDemographicChange={setDemographic}
           onRegionChange={setRegion}
           onHighlightedStateChange={setHighlightedState}
+          onSizeFilterChange={setSizeFilter}
         />
       </Dialog>
     </div>
@@ -138,13 +146,14 @@ DataOptionsDialog.propTypes = {
   region: PropTypes.string,
   highlightedState: PropTypes.string,
   onApplySettings: PropTypes.func,
+  sizeFilter: PropTypes.string
 }
 
 const mapStateToProps = (
-  state, 
+  state,
   { match: { params: { region, demographic, metric, highlightedState } } }
 ) => ({
-  region, demographic, metric, highlightedState
+  region, demographic, metric, highlightedState: highlightedState.split('-')[0], sizeFilter: highlightedState.split('-')[1] || 'all'
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -220,6 +220,11 @@ export const setExplorerDemographic = (demographicId) => ({
   demographicId
 })
 
+export const setExplorerSizeFilter = (size) => ({
+  type: 'SET_EXPLORER_SIZE_FILTER',
+  size
+})
+
 export const setExplorerRegion = (regionId) => ({
   type: 'SET_EXPLORER_REGION',
   regionId
@@ -392,6 +397,12 @@ export const onHighlightedStateChange = (stateAbbr) => (dispatch) => {
   dispatch(navigateToStateByAbbr(stateAbbr))
 }
 
+export const onSizeFilterChange = (size) =>
+  (dispatch) => {
+    updateRoute({ sizeFilter: size })
+    dispatch(setExplorerSizeFilter(size))
+}
+
 export const onRouteUpdates = (updates = {}) => (dispatch) => {
   if (updates.hasOwnProperty('region')) {
     dispatch(setExplorerRegion(updates.region))
@@ -401,6 +412,9 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))
+  }
+  if (updates.hasOwnProperty('sizeFilter')) {
+    dispatch(setExplorerSizeFilter(updates.sizeFilter))
   }
   if (updates.hasOwnProperty('metric')) {
     dispatch(setExplorerMetric(updates.metric))

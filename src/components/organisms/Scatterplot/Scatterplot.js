@@ -7,6 +7,7 @@ import { getBaseVars } from '../../../modules/config'
 import { getScatterplotOptions } from './utils';
 import { getStateAbbr, getStateFipsFromAbbr } from '../../../constants/statesFips';
 import { getLang, getLabelForVarName } from '../../../modules/lang';
+import axios from 'axios';
 
 const baseVars = getBaseVars()
 const endpoint = process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/';
@@ -52,7 +53,9 @@ function Scatterplot({
   onReady,
   onError
 }) {
-
+  
+  // highlightedState = '00'
+  // console.log('highlightedState >>>>', highlightedState)
   const regionData = data[region]
   
   const stateFips = getStateFipsFromAbbr(highlightedState);
@@ -72,11 +75,32 @@ function Scatterplot({
     [xVar, yVar, zVar, region, variant, highlightedState, regionData]
   );
 
+  const getFilteredData = () => {
+    let filteredData = {
+      schools: {},
+      districts: {},
+      counties: {}
+    }
+    if (!data.counties.name) {
+      return data
+    } else {
+      let keys = Object.keys(data.counties)
+      keys.forEach(key => {
+        filteredData.counties[key] = {10001: data.counties[key][10001]}
+      })
+    }
+    // console.log('filteredData >>>>>.', filteredData)
+    // let countyKeys = Object.keys(data.counties)
+    return filteredData
+  }
+
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
     // limit to 3000
-    return hl.slice(0, 3000)
+    return hl.slice(0, 5)
+    // return ["10001"]
+
   }, [highlightedState, regionData]);
 
   const needsData = !data || !data[region] || !data['name']
@@ -115,16 +139,37 @@ function Scatterplot({
   // disable lint, this doesn't need to fire when onData changes
   // eslint-disable-next-line
   }, [xVar, yVar, zVar, region, highlightedState, freeze])
-  
+
   const ariaLabel = getLang('UI_CHART_SR', {
     region,
     xVar: getLabelForVarName(xVar),
     yVar: getLabelForVarName(yVar)
   })
+
+  // const getLargest = (size) => {
+  //   return axios.get("https://bg78ripei7.execute-api.us-east-1.amazonaws.com/dev/schools?limit=100&asc=0&state=US&sort=all_sz&columns=id")
+  //   .then((res) => {
+  //     console.log('res >>>>>>>', res)
+  //   })
+  // }
+
+  // getLargest()
+  // const getLargest = (size) => {
+  //   if(data[region] && data[region].all_sz) {
+  //     let regionSizes = data[region].all_sz
+  //     let ids = highlighted.length ? highlighted : Object.keys(regionSizes)
+  //     ids = ids.sort((a,b) => regionSizes[b] - regionSizes[a]).slice(0, size)
+  //     console.log('ids >>>>>++++', ids)
+  //   }
+  // }
+  // let sliced = highlighted.slice(0,3)
+  // data.counties.name = {10001: "Kent County"}
+  // console.log('data>>>>>', data)
+
   return (
-    <div 
-      role="img" 
-      aria-label={ariaLabel} 
+    <div
+      role="img"
+      aria-label={ariaLabel}
       className={classNames('scatterplot', className)}
     >
       <SedaScatterplot

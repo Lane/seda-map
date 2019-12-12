@@ -16,7 +16,8 @@ const DEFAULT_ROUTEVARS = [
   'zoom', 
   'lat', 
   'lon', 
-  'locations' 
+  'locations',
+  'sizeFilter'
 ];
 
 /**
@@ -140,12 +141,14 @@ export const removeLocationFromPathname = (pathname, locationId) => {
  * @returns {object} e.g. { region: 'counties', metric: 'avg', ... }
  */
 export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
-  return path.substring(1, path.length)
+  let res = path.substring(1, path.length)
     .split('/')
     .reduce((acc, curr, i) => ({
       ...acc,
       [routeVars[i]]: curr
     }), {})
+  console.log('res>>>>>>', res)
+  return res
 }
 
 

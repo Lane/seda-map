@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { getStateSelectOptions } from '../../constants/statesFips';
-import { getSingularRegions, getDemographics, getGaps, getMetricById, isGapDemographic } from '../../modules/config';
+import { getSingularRegions, getSizeFilterSelectOptions, getDemographics, getGaps, getMetricById, isGapDemographic } from '../../modules/config';
 import InlineMenu from '../atoms/InlineMenu';
-import { onRegionChange, onDemographicChange, onHighlightedStateChange } from '../../actions';
+import { onRegionChange, onDemographicChange, onHighlightedStateChange, onSizeFilterChange } from '../../actions';
 
 export const GapTypeInlineMenu = ({metric, onChange}) => {
   const options = [
@@ -139,3 +139,40 @@ export const HighlightedStateControl = compose(
     })
   )
 )(HighlightedStateMenu)
+
+
+export const SizeFilterMenu = ({sizeFilter, onChange, ...rest}) => {
+  return (
+    <InlineMenu
+      id='size'
+      value={sizeFilter}
+      options={[
+        {
+          id: 'all',
+          label: 'All'
+        },
+        ...getSizeFilterSelectOptions()
+      ]}
+      onChange={onChange}
+      {...rest}
+    />
+  )
+}
+SizeFilterMenu.propTypes = {
+  sizeFilter: PropTypes.string,
+  onChange: PropTypes.func,
+}
+
+
+export const SizeFilterControl = compose(
+  withRouter,
+  connect(
+    (s, { match: { params: { sizeFilter = 'all' }}}) => ({
+      sizeFilter
+    }),
+    (dispatch, ownProps) => ({
+      onChange: (id) =>
+        dispatch(onSizeFilterChange(id, ownProps))
+    })
+  )
+)(SizeFilterMenu)

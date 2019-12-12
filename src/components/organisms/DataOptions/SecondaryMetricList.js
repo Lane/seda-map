@@ -6,7 +6,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getLang } from '../../../modules/lang';
 import { ListSubheader } from '@material-ui/core';
-import { DemographicAndGapMenu, RegionInlineMenu, HighlightedStateMenu } from '../../seda/SedaSelectControls';
+import { DemographicAndGapMenu, RegionInlineMenu, HighlightedStateMenu, SizeFilterMenu } from '../../seda/SedaSelectControls';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -22,11 +22,13 @@ export default function SecondaryMetricList({
   onDemographicChange,
   onRegionChange,
   onHighlightedStateChange,
+  sizeFilter,
+  onSizeFilterChange
 }) {
   const classes = useStyles();
 
   return (
-    <List 
+    <List
       className={classes.root}
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -68,6 +70,18 @@ export default function SecondaryMetricList({
           <HighlightedStateMenu
             highlightedState={highlightedState}
             onChange={onHighlightedStateChange}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem>
+        <ListItemText
+          id='sizeFilterLabel'
+          primary={getLang('LABEL_SIZE_FILTER')}
+        />
+        <ListItemSecondaryAction>
+          <SizeFilterMenu
+            sizeFilter={sizeFilter}
+            onChange={onSizeFilterChange}
           />
         </ListItemSecondaryAction>
       </ListItem>
