@@ -410,24 +410,37 @@ export const onSizeFilterChange = (size, highlightedState, region) =>
   (dispatch) => {
     updateRoute({ sizeFilter: size })
     dispatch(setExplorerSizeFilter(size))
-    axios.get(`${process.env.REACT_APP_DATA_API_URL}/${region}?limit=10&asc=0&state=${highlightedState}&sort=all_sz&columns=id`)
-      .then(res => dispatch({type: 'LARGEST_LOADED', largest: res.data.map(d => d.id) }))
+    if (size === 'all') {
+      dispatch({type: 'RESET_SIZE_FILTER'})
+    } else {
+      axios.get(`${process.env.REACT_APP_DATA_API_URL}/${region}?limit=10&asc=0&state=${highlightedState}&sort=all_sz&columns=id`)
+        .then(res => dispatch({type: 'LARGEST_LOADED', largest: res.data.map(d => d.id) }))
+    }
 }
 
 export const onRouteUpdates = (updates = {}) => (dispatch) => {
+  let params = getParamsFromPathname(window.location.hash.substr(1))
+  let stateAbbr = updates.highlightedState || params.highlightedState
+  stateAbbr = stateAbbr.toUpperCase()
+  let region = updates.region || params.region
+  let size = params.sizeFilter
+
   if (updates.hasOwnProperty('region')) {
     dispatch(setExplorerRegion(updates.region))
+    if (!updates.sizeFilter) {
+      dispatch(onSizeFilterChange(size, stateAbbr, updates.region))
+    }
   }
   if (updates.hasOwnProperty('highlightedState')) {
     dispatch(setExplorerState(updates.highlightedState))
+    if (!updates.sizeFilter) {
+      dispatch(onSizeFilterChange(size, updates.highlightedState.toUpperCase(), region))
+    }
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))
   }
   if (updates.hasOwnProperty('sizeFilter')) {
-    let params = getParamsFromPathname(window.location.hash.substr(1))
-    let stateAbbr = params.highlightedState.toUpperCase()
-    let region = params.region
     dispatch(setExplorerSizeFilter(updates.sizeFilter))
     dispatch(onSizeFilterChange(updates.sizeFilter, stateAbbr, region))
   }

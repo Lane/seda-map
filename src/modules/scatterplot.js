@@ -80,6 +80,12 @@ const largest = (state = [], action) => {
         ...state,
         largest: action.largest
       }
+    case 'RESET_SIZE_FILTER':
+      console.log('reset size filter')
+      return {
+        ...state,
+        largest: []
+      }
     default:
       return state
   }
