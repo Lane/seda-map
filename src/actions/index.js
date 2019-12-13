@@ -413,7 +413,7 @@ export const onSizeFilterChange = (size, highlightedState, region) =>
     if (size === 'all') {
       dispatch({type: 'RESET_SIZE_FILTER'})
     } else {
-      axios.get(`${process.env.REACT_APP_DATA_API_URL}/${region}?limit=10&asc=0&state=${highlightedState}&sort=all_sz&columns=id`)
+      axios.get(`${process.env.REACT_APP_DATA_API_URL}/${region}?limit=${size}&asc=0&state=${highlightedState}&sort=all_sz&columns=id`)
         .then(res => dispatch({type: 'LARGEST_LOADED', largest: res.data.map(d => d.id) }))
     }
 }
@@ -427,7 +427,12 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
 
   if (updates.hasOwnProperty('region')) {
     dispatch(setExplorerRegion(updates.region))
-    if (!updates.sizeFilter) {
+    if (updates.region === 'schools') {
+      // size filtering is not possible for schools
+      updates.sizeFilter = 'all'
+      dispatch({type: 'RESET_SIZE_FILTER'})
+    } else if (!updates.sizeFilter) {
+      // update size filter for new region
       dispatch(onSizeFilterChange(size, stateAbbr, updates.region))
     }
   }
@@ -442,7 +447,9 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
   }
   if (updates.hasOwnProperty('sizeFilter')) {
     dispatch(setExplorerSizeFilter(updates.sizeFilter))
-    dispatch(onSizeFilterChange(updates.sizeFilter, stateAbbr, region))
+    if (updates.region !== 'schools') {
+      dispatch(onSizeFilterChange(updates.sizeFilter, stateAbbr, region))
+    }
   }
   if (updates.hasOwnProperty('metric')) {
     dispatch(setExplorerMetric(updates.metric))
@@ -454,7 +461,7 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
     dispatch(setExplorerLocations(updates.locations))
   }
   updateRoute(updates);
-} 
+}
 
 /**
  * Thunk that updates the region in the route

@@ -73,18 +73,23 @@ export default function SecondaryMetricList({
           />
         </ListItemSecondaryAction>
       </ListItem>
-      <ListItem>
-        <ListItemText
-          id='sizeFilterLabel'
-          primary={getLang('LABEL_SIZE_FILTER')}
-        />
-        <ListItemSecondaryAction>
-          <SizeFilterMenu
-            sizeFilter={sizeFilter}
-            onChange={onSizeFilterChange}
-          />
-        </ListItemSecondaryAction>
-      </ListItem>
+      {
+        region === 'schools' ? null :
+          (
+            <ListItem>
+              <ListItemText
+                id='sizeFilterLabel'
+                primary={getLang('LABEL_SIZE_FILTER')}
+              />
+              <ListItemSecondaryAction>
+                <SizeFilterMenu
+                  sizeFilter={sizeFilter}
+                  onChange={onSizeFilterChange}
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+          )
+        }
     </List>
   );
 }
