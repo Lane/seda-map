@@ -4,7 +4,7 @@ import * as _merge from 'lodash.merge';
 const defaultData = {
   'schools': {},
   'districts': {},
-  'counties': {}
+  'counties': {},
 }
 
 const handleReceivedData = (state, data, region) => {
@@ -72,7 +72,20 @@ const error = (state = false, action) => {
   }
 }
 
-const scatterplot = combineReducers({ data, loaded, error })
+const largest = (state = [], action) => {
+  switch(action.type) {
+    case 'LARGEST_LOADED':
+      console.log('largest loaded action: ', action)
+      return {
+        ...state,
+        largest: action.largest
+      }
+    default:
+      return state
+  }
+}
+
+const scatterplot = combineReducers({ data, loaded, error, largest })
 
 export default scatterplot;
 

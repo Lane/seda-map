@@ -4,18 +4,20 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getScatterplotVars, isVersusFromVarNames } from '../../modules/config';
-import { getStateFipsFromAbbr } from '../../constants/statesFips';
+import { getStateAbbr, getStateFipsFromAbbr } from '../../constants/statesFips';
 import { loadLocation, onHoverFeature, onScatterplotData, onScatterplotLoaded, onScatterplotError } from "../../actions";
 import Scatterplot from '../organisms/Scatterplot';
 import SedaLocationMarkers from './SedaLocationMarkers';
 import ScatterplotHeading from '../organisms/Scatterplot/ScatterplotHeading';
 import ScatterplotAxis from '../organisms/Scatterplot/ScatterplotAxis';
+import axios from 'axios';
 
 const SedaExplorerChart = ({
   region,
   metric,
   demographic,
   highlightedState,
+  sizeFilter,
   hovered,
   data,
   onData,
@@ -23,6 +25,7 @@ const SedaExplorerChart = ({
   onHover,
   onClick,
   onError,
+  largest
 }) => {
   const vars = getScatterplotVars(region, metric, demographic);
   const isVersus = isVersusFromVarNames(vars.xVar, vars.yVar);
@@ -33,12 +36,14 @@ const SedaExplorerChart = ({
       data,
       variant: 'map',
       highlightedState: getStateFipsFromAbbr(highlightedState),
+      sizeFilter,
       className: isVersus ? 'scatterplot--versus': '',
       onData,
       onReady,
       onHover,
       onClick,
-      onError
+      onError,
+      largest
     }}>
       <ScatterplotHeading {...{...vars, region, highlightedState}} />
       <SedaLocationMarkers 
@@ -68,6 +73,7 @@ SedaExplorerChart.propTypes = {
   metric: PropTypes.string,
   demographic: PropTypes.string,
   highlightedState: PropTypes.string,
+  sizeFilter: PropTypes.string,
   hovered: PropTypes.object,
   data: PropTypes.object,
   onData: PropTypes.func,
@@ -77,8 +83,8 @@ SedaExplorerChart.propTypes = {
   onError: PropTypes.func,
 }
 
-const mapStateToProps = ({ 
-  scatterplot: { data },
+const mapStateToProps = ({
+  scatterplot: { data, largest },
   sections: { hovered },
 },
 { match: { params: { region, metric, secondary, demographic, highlightedState } } }
@@ -89,8 +95,10 @@ const mapStateToProps = ({
     secondary,
     demographic,
     highlightedState: highlightedState.split('-')[0],
+    sizeFilter: highlightedState.split('-')[1],
     hovered,
     data,
+    largest
   })
 }
 

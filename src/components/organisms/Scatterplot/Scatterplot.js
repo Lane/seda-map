@@ -7,7 +7,6 @@ import { getBaseVars } from '../../../modules/config'
 import { getScatterplotOptions } from './utils';
 import { getStateAbbr, getStateFipsFromAbbr } from '../../../constants/statesFips';
 import { getLang, getLabelForVarName } from '../../../modules/lang';
-import axios from 'axios';
 
 const baseVars = getBaseVars()
 const endpoint = process.env.REACT_APP_DATA_ENDPOINT + 'scatterplot/';
@@ -44,6 +43,7 @@ function Scatterplot({
   className,
   region,
   highlightedState,
+  sizeFilter,
   variant,
   freeze,
   children,
@@ -51,21 +51,21 @@ function Scatterplot({
   onClick,
   onData,
   onReady,
-  onError
+  onError,
+  largest
 }) {
   
-  // highlightedState = '00'
   const regionData = data[region]
-  
+
   const stateFips = getStateFipsFromAbbr(highlightedState);
 
   // memoize scatterplot options
   const scatterplotOptions = useMemo(
     () => {
       const options = getScatterplotOptions(
-        variant, 
-        regionData, 
-        { xVar, yVar, zVar }, 
+        variant,
+        regionData,
+        { xVar, yVar, zVar },
         highlightedState,
         region
       )
@@ -74,32 +74,19 @@ function Scatterplot({
     [xVar, yVar, zVar, region, variant, highlightedState, regionData]
   );
 
-  // const getFilteredData = () => {
-  //   let filteredData = {
-  //     schools: {},
-  //     districts: {},
-  //     counties: {}
-  //   }
-  //   if (!data.counties.name) {
-  //     return data
-  //   } else {
-  //     let keys = Object.keys(data.counties)
-  //     keys.forEach(key => {
-  //       filteredData.counties[key] = {10001: data.counties[key][10001]}
-  //     })
-  //   }
-    
-  //   return filteredData
-  // }
-
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
-    // limit to 3000
-    return hl.slice(0, 3000)
-    // return ["10001"]
-
-  }, [highlightedState, regionData]);
+    if (largest.length || (largest && !Array.isArray(largest))) {
+      console.log('hl: ', hl)
+      console.log('largest: ', largest)
+      let filtered = hl.filter(h => largest.largest.indexOf(h) > -1)
+      console.log('filtered: ', filtered)
+      return filtered
+    } else {
+      return hl.slice(0, 3000)
+    }
+  }, [highlightedState, regionData, largest]);
 
   const needsData = !data || !data[region] || !data['name']
   // fetch base vars for region if they haven't already been fetched
@@ -124,9 +111,9 @@ function Scatterplot({
   useEffect(() => {
     if (!freeze && region === 'schools' && highlightedState && highlightedState !== 'us') {
       fetchScatterplotVars(
-        [ xVar, yVar, zVar ], 
-        'schools', 
-        endpoint, 
+        [ xVar, yVar, zVar ],
+        'schools',
+        endpoint,
         getBaseVars()['schools'],
         highlightedState
       ).then((data) => {
@@ -143,28 +130,6 @@ function Scatterplot({
     xVar: getLabelForVarName(xVar),
     yVar: getLabelForVarName(yVar)
   })
-
-  // const getLargest = (size) => {
-  //   return axios.get("https://bg78ripei7.execute-api.us-east-1.amazonaws.com/dev/schools?limit=100&asc=0&state=US&sort=all_sz&columns=id")
-  //   .then((res) => {
-  //     console.log('res >>>>>>>', res)
-  //   })
-  // }
-
-  // getLargest()
-  // const getLargest = (size) => {
-  //   if(data[region] && data[region].all_sz) {
-  //     let regionSizes = data[region].all_sz
-  //     let ids = highlighted.length ? highlighted : Object.keys(regionSizes)
-  //     ids = ids.sort((a,b) => regionSizes[b] - regionSizes[a]).slice(0, size)
-  //     console.log('ids >>>>>++++', ids)
-  //   }
-  // }
-  // let sliced = highlighted.slice(0,3)
-  // data.counties.name = {10001: "Kent County"}
-  // console.log('data>>>>>', data)
-  console.log('scatterplot highlighted state: ', highlightedState)
-
   return (
     <div
       role="img"
@@ -223,6 +188,7 @@ Scatterplot.propTypes = {
   region: PropTypes.string,
   data: PropTypes.object,
   highlightedState: PropTypes.string,
+  sizeFilter: PropTypes.string,
   selected: PropTypes.array,
   hovered: PropTypes.object,
   variant: PropTypes.string,

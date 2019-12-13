@@ -2,7 +2,7 @@ import { loadFeaturesFromRoute, loadFeatureFromCoords, loadFlaggedData } from ".
 import { getRegionFromFeatureId, getRegionFromFeature, getPredictedValue } from "../modules/config";
 import {FlyToInterpolator} from 'react-map-gl';
 import * as ease from 'd3-ease';
-import { addFeatureToRoute, removeFeatureFromRoute, updateRoute } from '../modules/router';
+import { addFeatureToRoute, removeFeatureFromRoute, updateRoute, getParamsFromPathname } from '../modules/router';
 import { getStateViewport, getStateName } from '../constants/statesFips';
 import { getFeatureProperty } from "../modules/features";
 import axios from 'axios';
@@ -178,6 +178,15 @@ export const onScatterplotError = (e, sectionId) => {
 export const onScatterplotLoaded = (scatterplotId) => ({
   type: 'SCATTERPLOT_LOADED',
   scatterplotId
+});
+
+/**
+ * Action to dispatch when largest ids fetched
+ * @param {array} largest ids
+ */
+export const onLargestLoaded = (largest) => ({
+  type: 'LARGEST_LOADED',
+  largest
 });
 
 /**
@@ -393,15 +402,16 @@ export const setDemographicAndMetric = (demographic, metric) =>
 
 export const onHighlightedStateChange = (stateAbbr) => (dispatch) => {
   updateRoute({ highlightedState: stateAbbr })
-  console.log('stateAbbr: ', stateAbbr)
   dispatch(setExplorerState(stateAbbr))
   dispatch(navigateToStateByAbbr(stateAbbr))
 }
 
-export const onSizeFilterChange = (size) =>
+export const onSizeFilterChange = (size, highlightedState, region) =>
   (dispatch) => {
     updateRoute({ sizeFilter: size })
     dispatch(setExplorerSizeFilter(size))
+    axios.get(`${process.env.REACT_APP_DATA_API_URL}/${region}?limit=10&asc=0&state=${highlightedState}&sort=all_sz&columns=id`)
+      .then(res => dispatch({type: 'LARGEST_LOADED', largest: res.data.map(d => d.id) }))
 }
 
 export const onRouteUpdates = (updates = {}) => (dispatch) => {
@@ -409,14 +419,17 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
     dispatch(setExplorerRegion(updates.region))
   }
   if (updates.hasOwnProperty('highlightedState')) {
-    console.log('hasownprop highlightedstate: ', updates.highlightedState)
     dispatch(setExplorerState(updates.highlightedState))
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))
   }
   if (updates.hasOwnProperty('sizeFilter')) {
+    let params = getParamsFromPathname(window.location.hash.substr(1))
+    let stateAbbr = params.highlightedState.toUpperCase()
+    let region = params.region
     dispatch(setExplorerSizeFilter(updates.sizeFilter))
+    dispatch(onSizeFilterChange(updates.sizeFilter, stateAbbr, region))
   }
   if (updates.hasOwnProperty('metric')) {
     dispatch(setExplorerMetric(updates.metric))
