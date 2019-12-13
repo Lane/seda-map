@@ -55,7 +55,6 @@ function Scatterplot({
 }) {
   
   // highlightedState = '00'
-  // console.log('highlightedState >>>>', highlightedState)
   const regionData = data[region]
   
   const stateFips = getStateFipsFromAbbr(highlightedState);
@@ -75,30 +74,29 @@ function Scatterplot({
     [xVar, yVar, zVar, region, variant, highlightedState, regionData]
   );
 
-  const getFilteredData = () => {
-    let filteredData = {
-      schools: {},
-      districts: {},
-      counties: {}
-    }
-    if (!data.counties.name) {
-      return data
-    } else {
-      let keys = Object.keys(data.counties)
-      keys.forEach(key => {
-        filteredData.counties[key] = {10001: data.counties[key][10001]}
-      })
-    }
-    // console.log('filteredData >>>>>.', filteredData)
-    // let countyKeys = Object.keys(data.counties)
-    return filteredData
-  }
+  // const getFilteredData = () => {
+  //   let filteredData = {
+  //     schools: {},
+  //     districts: {},
+  //     counties: {}
+  //   }
+  //   if (!data.counties.name) {
+  //     return data
+  //   } else {
+  //     let keys = Object.keys(data.counties)
+  //     keys.forEach(key => {
+  //       filteredData.counties[key] = {10001: data.counties[key][10001]}
+  //     })
+  //   }
+    
+  //   return filteredData
+  // }
 
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
     // limit to 3000
-    return hl.slice(0, 5)
+    return hl.slice(0, 3000)
     // return ["10001"]
 
   }, [highlightedState, regionData]);
@@ -165,6 +163,7 @@ function Scatterplot({
   // let sliced = highlighted.slice(0,3)
   // data.counties.name = {10001: "Kent County"}
   // console.log('data>>>>>', data)
+  console.log('scatterplot highlighted state: ', highlightedState)
 
   return (
     <div

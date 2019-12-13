@@ -130,8 +130,8 @@ HighlightedStateMenu.propTypes = {
 export const HighlightedStateControl = compose(
   withRouter,
   connect(
-    (s, { match: { params: { highlightedState = 'us' }}}) => ({
-      highlightedState
+    (s, { match: { params: { highlightedState = 'us-all' }}}) => ({
+      highlightedState: highlightedState.split('-')[0]
     }),
     (dispatch, ownProps) => ({
       onChange: (id) =>

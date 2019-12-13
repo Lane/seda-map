@@ -62,9 +62,7 @@ const DataOptionsDialog = ({
   const [ dialogDem, setDemographic ] = React.useState(demographic);
   const [ dialogRegion, setRegion ] = React.useState(region);
   const [ dialogState, setHighlightedState ] = React.useState(highlightedState);
-  console.log('dialogState >>>>>', dialogState)
   const [ dialogSize, setSizeFilter ] = React.useState(sizeFilter);
-  console.log('dialogSize >>>>>', dialogSize)
 
   const resetOptions = () => {
     setKeyMetric(metric);

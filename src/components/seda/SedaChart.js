@@ -88,7 +88,7 @@ const mapStateToProps = ({
     metric,
     secondary,
     demographic,
-    highlightedState,
+    highlightedState: highlightedState.split('-')[0],
     hovered,
     data,
   })

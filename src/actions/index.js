@@ -393,6 +393,7 @@ export const setDemographicAndMetric = (demographic, metric) =>
 
 export const onHighlightedStateChange = (stateAbbr) => (dispatch) => {
   updateRoute({ highlightedState: stateAbbr })
+  console.log('stateAbbr: ', stateAbbr)
   dispatch(setExplorerState(stateAbbr))
   dispatch(navigateToStateByAbbr(stateAbbr))
 }
@@ -408,6 +409,7 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
     dispatch(setExplorerRegion(updates.region))
   }
   if (updates.hasOwnProperty('highlightedState')) {
+    console.log('hasownprop highlightedstate: ', updates.highlightedState)
     dispatch(setExplorerState(updates.highlightedState))
   }
   if (updates.hasOwnProperty('demographic')) {
