@@ -32,6 +32,7 @@ import SedaMenu from './SedaMenu';
 import SedaSearch from './SedaSearch';
 import { getLang } from '../../modules/lang';
 import DataOptionsDialog from '../organisms/DataOptions';
+import DataOptionsDialog2 from '../organisms/DataOptions/DataOptionsDialog2';
 import MenuButton from '../atoms/MenuButton';
 import HelpButton from '../molecules/HelpButton';
 import { toggleHelp, onMetricChange, onViewChange } from '../../actions';
@@ -70,8 +71,6 @@ const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, o
         <DataOptionsDialog />
       )
     }
-    
-    
   </div>
 }
 
@@ -88,7 +87,7 @@ HeaderPrimary.propTypes = {
  * @param {string} region 
  * @param {string} highlightedState 
  */
-export const HeaderSecondaryControls = ({ region, metric }) => {
+export const HeaderSecondaryControls = ({ region, metric, view }) => {
   return (
     region === 'schools' ?
       <div className="menu-sentence">
@@ -101,9 +100,11 @@ export const HeaderSecondaryControls = ({ region, metric }) => {
         Showing 
         <DemographicAndGapControl />
         by
-        <RegionControl /> 
-        in 
-        <HighlightedStateControl />
+        <RegionControl />
+        { view === 'chart' ?
+          <DataOptionsDialog2 /> :
+          <span>in <HighlightedStateControl /></span>
+        }
       </div>
   )
 }
@@ -121,7 +122,7 @@ const HeaderSecondary = ({
       className={classNames({ 'button--help-on': helpOpen})}
       onClick={onHelpClick}
     />
-    <HeaderSecondaryControls metric={metric} region={region} />
+    <HeaderSecondaryControls metric={metric} region={region} view={view} />
     <ToggleButtons
       items={[
         {
