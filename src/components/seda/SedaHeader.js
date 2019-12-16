@@ -129,7 +129,7 @@ export const HeaderSecondaryControls = ({ region, metric, view }) => {
         <DemographicAndGapControl />
         by
         <RegionControl />
-        { view === 'chart' ?
+        { (view === 'chart'  || view === 'split') ?
           <DataOptionsDialog
             dialogTrigger={
               <MoreFiltersButton text='More Filters' />
