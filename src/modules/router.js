@@ -141,7 +141,7 @@ export const removeLocationFromPathname = (pathname, locationId) => {
  * @returns {object} e.g. { region: 'counties', metric: 'avg', ... }
  */
 export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
-  let res = path.substring(1, path.length)
+  return path.substring(1, path.length)
     .split('/')
     .reduce(
       (acc, curr, i) => {
@@ -155,7 +155,6 @@ export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
       },
       {}
     )
-  return res
 }
 
 

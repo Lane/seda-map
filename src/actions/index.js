@@ -184,9 +184,9 @@ export const onScatterplotLoaded = (scatterplotId) => ({
  * Action to dispatch when largest ids fetched
  * @param {array} largest ids
  */
-export const onLargestLoaded = (largest) => ({
-  type: 'LARGEST_LOADED',
-  largest
+export const onDataFilteredBySizeLoaded = (data) => ({
+  type: 'DATA_FILTERED_BY_SIZE_LOADED',
+  data
 });
 
 /**
@@ -415,14 +415,10 @@ export const onSizeFilterChange = (size, highlightedState, region) =>
     if (size === 'all') {
       dispatch({type: 'RESET_SIZE_FILTER'})
     } else {
-      let reqStr = `/${region}?limit=${size}&asc=0&state=${highlightedState}&sort=all_sz&columns=id`
-      axios.get(`${process.env.REACT_APP_DATA_API_URL}${reqStr}`)
-        .then(res =>
-          dispatch({
-            type: 'LARGEST_LOADED',
-            largest: res.data.map(d => d.id)
-          })
-        )
+      let requestAPI = process.env.REACT_APP_DATA_API_URL
+      let requestPath = `/${region}?limit=${size}&asc=0&state=${highlightedState}&sort=all_sz&columns=id`
+      axios.get(`${requestAPI}${requestPath}`)
+        .then(res => dispatch(onDataFilteredBySizeLoaded(res.data.map(d => d.id))))
     }
 }
 

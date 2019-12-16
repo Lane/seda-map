@@ -72,24 +72,24 @@ const error = (state = false, action) => {
   }
 }
 
-const largest = (state = [], action) => {
+const dataFilteredBySize = (state = {data: []}, action) => {
   switch(action.type) {
-    case 'LARGEST_LOADED':
+    case 'DATA_FILTERED_BY_SIZE_LOADED':
       return {
         ...state,
-        largest: action.largest
+        data: action.data
       }
     case 'RESET_SIZE_FILTER':
       return {
         ...state,
-        largest: []
+        data: []
       }
     default:
       return state
   }
 }
 
-const scatterplot = combineReducers({ data, loaded, error, largest })
+const scatterplot = combineReducers({ data, loaded, error, dataFilteredBySize })
 
 export default scatterplot;
 

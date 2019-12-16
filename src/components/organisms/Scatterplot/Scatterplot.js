@@ -52,27 +52,25 @@ function Scatterplot({
   onData,
   onReady,
   onError,
-  largest
+  dataFilteredBySize
 }) {
-  const filterDataBySize = () => {
-    let dataFilteredBySize = Object.assign({}, data)
-    if (largest.length || (largest && !Array.isArray(largest))) {
-      let regionKeys = Object.keys(data[region])
-      let newRegion = {}
-      regionKeys.map(k => {
-        newRegion[k] = {}
-        return largest.largest.forEach(l => {
-          newRegion[k][l] = data[region][k][l]
-        })
+
+  const makeFilteredDataObject = () => {
+    // filters the "data" object, based on the set of id's inside the "dataFilteredBySize" array
+    let filteredDataObject = Object.assign({}, data)
+    let regionKeys = Object.keys(data[region])
+    let filteredRegion = {}
+    regionKeys.forEach(k => {
+      filteredRegion[k] = {}
+      dataFilteredBySize.forEach(id => {
+        filteredRegion[k][id] = data[region][k][id]
       })
-      dataFilteredBySize[region] = newRegion
-      return dataFilteredBySize
-    } else {
-      return data
-    }
+    })
+    filteredDataObject[region] = filteredRegion
+    return filteredDataObject
   }
 
-  let dataValue = (sizeFilter === 'all' || highlightedState) ? data : filterDataBySize()
+  let dataValue = (sizeFilter === 'all' || highlightedState) ? data : makeFilteredDataObject()
   let regionData = dataValue[region]
 
   const stateFips = getStateFipsFromAbbr(highlightedState);
@@ -95,13 +93,13 @@ function Scatterplot({
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
-    if (largest.largest && largest.largest.length) {
-      let filtered = hl.filter(h => largest.largest.indexOf(h) > -1)
+    if (dataFilteredBySize.length) {
+      let filtered = hl.filter(h => dataFilteredBySize.indexOf(h) > -1)
       return filtered
     } else {
       return hl.slice(0, 3000)
     }
-  }, [highlightedState, regionData, largest]);
+  }, [highlightedState, regionData, dataFilteredBySize]);
 
   const needsData = !data || !data[region] || !data['name']
   // fetch base vars for region if they haven't already been fetched
@@ -216,6 +214,7 @@ Scatterplot.propTypes = {
   onError: PropTypes.func,
   freeze: PropTypes.bool,
   error: PropTypes.string,
+  dataFilteredBySize: PropTypes.array
 }
 
 export default Scatterplot

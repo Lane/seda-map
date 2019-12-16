@@ -24,7 +24,7 @@ const SedaExplorerChart = ({
   onHover,
   onClick,
   onError,
-  largest
+  dataFilteredBySize
 }) => {
   const vars = getScatterplotVars(region, metric, demographic);
   const isVersus = isVersusFromVarNames(vars.xVar, vars.yVar);
@@ -42,7 +42,7 @@ const SedaExplorerChart = ({
       onHover,
       onClick,
       onError,
-      largest
+      dataFilteredBySize
     }}>
       <ScatterplotHeading {...{...vars, region, highlightedState}} />
       <SedaLocationMarkers 
@@ -79,11 +79,12 @@ SedaExplorerChart.propTypes = {
   onReady: PropTypes.func,
   onHover: PropTypes.func,
   onClick: PropTypes.func,
-  onError: PropTypes.func
+  onError: PropTypes.func,
+  dataFilteredBySize: PropTypes.array
 }
 
 const mapStateToProps = ({
-  scatterplot: { data, largest },
+  scatterplot: { data, dataFilteredBySize },
   sections: { hovered },
 },
 { match: { params: { region, metric, secondary, demographic, highlightedState } } }
@@ -97,7 +98,7 @@ const mapStateToProps = ({
     sizeFilter: highlightedState.split('-')[1],
     hovered,
     data,
-    largest
+    dataFilteredBySize: dataFilteredBySize.data
   })
 }
 
