@@ -10,7 +10,6 @@ import Scatterplot from '../organisms/Scatterplot';
 import SedaLocationMarkers from './SedaLocationMarkers';
 import ScatterplotHeading from '../organisms/Scatterplot/ScatterplotHeading';
 import ScatterplotAxis from '../organisms/Scatterplot/ScatterplotAxis';
-import axios from 'axios';
 
 const SedaExplorerChart = ({
   region,

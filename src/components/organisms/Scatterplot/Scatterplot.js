@@ -61,7 +61,7 @@ function Scatterplot({
       let newRegion = {}
       regionKeys.map(k => {
         newRegion[k] = {}
-        largest.largest.forEach(l => {
+        return largest.largest.forEach(l => {
           newRegion[k][l] = data[region][k][l]
         })
       })

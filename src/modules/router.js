@@ -147,7 +147,7 @@ export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
       (acc, curr, i) => {
         if (routeVars[i] === 'highlightedState') {
           let selectedState = curr.split('-')[0]
-          let sizeFilter = curr.split('-')[1]
+          let sizeFilter = curr.split('-')[1] || 'all'
           return ({ ...acc, highlightedState: selectedState, sizeFilter})
         } else {
           return ({ ...acc, [routeVars[i]]: curr})

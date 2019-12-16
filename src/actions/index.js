@@ -402,8 +402,10 @@ export const setDemographicAndMetric = (demographic, metric) =>
 
 export const onHighlightedStateChange = (stateAbbr) => (dispatch) => {
   updateRoute({ highlightedState: stateAbbr })
+  dispatch(updateSizeFilter({ highlightedState: stateAbbr }))
   dispatch(setExplorerState(stateAbbr))
   dispatch(navigateToStateByAbbr(stateAbbr))
+
 }
 
 export const onSizeFilterChange = (size, highlightedState, region) =>
@@ -413,8 +415,14 @@ export const onSizeFilterChange = (size, highlightedState, region) =>
     if (size === 'all') {
       dispatch({type: 'RESET_SIZE_FILTER'})
     } else {
-      axios.get(`${process.env.REACT_APP_DATA_API_URL}/${region}?limit=${size}&asc=0&state=${highlightedState}&sort=all_sz&columns=id`)
-        .then(res => dispatch({type: 'LARGEST_LOADED', largest: res.data.map(d => d.id) }))
+      let reqStr = `/${region}?limit=${size}&asc=0&state=${highlightedState}&sort=all_sz&columns=id`
+      axios.get(`${process.env.REACT_APP_DATA_API_URL}${reqStr}`)
+        .then(res =>
+          dispatch({
+            type: 'LARGEST_LOADED',
+            largest: res.data.map(d => d.id)
+          })
+        )
     }
 }
 
@@ -422,16 +430,11 @@ export const updateSizeFilter = (updates) => (dispatch) => {
   let params = getParamsFromPathname(window.location.hash.substr(1))
   let region = updates.region || params.region
   let size = updates.sizeFilter || params.sizeFilter
-  let view = params.view
   let stateAbbr = updates.highlightedState || params.highlightedState
   stateAbbr = stateAbbr.toUpperCase()
-  if (view === 'map') {
-    // size filtering currently not possible for map view
-    return;
-  } else if (updates.region === 'schools') {
+  if (updates.region === 'schools') {
     // size filtering currently not possible for schools
     // reset size filter to default of 'all'
-    updates.sizeFilter = 'all'
     dispatch({type: 'RESET_SIZE_FILTER'})
     return;
   } else {
@@ -479,15 +482,18 @@ export const onRegionChange = (region) =>
     if (region === 'schools') {
       routeUpdates['demographic'] = 'all';
       routeUpdates['secondary'] = 'frl';
+      // size filtering currently not possible for schools
+      // reset size filter to default of 'all'
+      routeUpdates['sizeFilter'] = 'all';
     } else {
       const secondary = getState()['sections']['gapChartX']
       routeUpdates['secondary'] = secondary;
     }
     updateRoute(routeUpdates)
+    dispatch(updateSizeFilter(routeUpdates))
     dispatch(setExplorerRegion(region))
     dispatch(clearActiveLocation())
   }
-    
 
 /**
  * Thunk that adds a feature to the selected list
