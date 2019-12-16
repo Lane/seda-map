@@ -435,7 +435,7 @@ export const updateSizeFilter = (updates) => (dispatch) => {
     return;
   } else {
     // user has modified some param
-    // we need to fetch the new results, then filter by the previously set size filter
+    // we need to fetch the new results, then filter by the (new or previously set) size filter
     dispatch(onSizeFilterChange(size, stateAbbr, region))
   }
 }
@@ -447,7 +447,6 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
   }
   if (updates.hasOwnProperty('highlightedState')) {
     dispatch(setExplorerState(updates.highlightedState))
-    dispatch(onHighlightedStateChange(updates.highlightedState))
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))
