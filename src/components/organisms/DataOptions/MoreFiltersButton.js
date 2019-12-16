@@ -1,19 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Button } from '@material-ui/core';
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 
 const MoreFiltersButton = ({
   text,
   subtext,
-  icon = <UnfoldMoreIcon />
+  icon = <FilterListIcon />
 }) => {
   return (
     <Button className="more-filters-button">
+      {icon}
       <span className="select-button__text">{text}</span>
       <span className="select-button__subtext">{subtext}</span>
-      {icon}
     </Button>
   )
 }

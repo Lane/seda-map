@@ -31,5 +31,9 @@
 }
 
 .MuiButtonBase-root.more-filters-button {
-  color: var(--link);
+  color: var(--text2);;
 }
+.MuiButtonBase-root.more-filters-button svg {
+  padding-right: 5px;
+}
+
