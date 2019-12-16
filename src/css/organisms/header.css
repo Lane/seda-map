@@ -213,7 +213,8 @@
 /** Show map + chart toggle at tablet landscape */
 @media(min-width: 650px) {
   .header__row--secondary .menu-sentence {
-    display: block;
+    display: flex;
+    align-items: center;
   }
 }
 

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { getScatterplotVars, isVersusFromVarNames } from '../../modules/config';
-import { getStateAbbr, getStateFipsFromAbbr } from '../../constants/statesFips';
+import { getStateFipsFromAbbr } from '../../constants/statesFips';
 import { loadLocation, onHoverFeature, onScatterplotData, onScatterplotLoaded, onScatterplotError } from "../../actions";
 import Scatterplot from '../organisms/Scatterplot';
 import SedaLocationMarkers from './SedaLocationMarkers';
@@ -80,7 +80,7 @@ SedaExplorerChart.propTypes = {
   onReady: PropTypes.func,
   onHover: PropTypes.func,
   onClick: PropTypes.func,
-  onError: PropTypes.func,
+  onError: PropTypes.func
 }
 
 const mapStateToProps = ({

@@ -29,3 +29,7 @@
   right: 0px;
   fill: var(--link);
 }
+
+.MuiButtonBase-root.more-filters-button {
+  color: var(--link);
+}

@@ -13,13 +13,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import SelectButton from './SelectButton';
-import { getLang } from '../../../modules/lang';
+
 import KeyMetricList from './KeyMetricList';
 import SecondaryMetricList from './SecondaryMetricList';
 import { onRouteUpdates } from '../../../actions';
-import { isGapDemographic } from '../../../modules/config';
-import { getStatePropByAbbr } from '../../../constants/statesFips';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -35,19 +32,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-/** Returns the subtitle for the provided vars */
-const getSubline = (demographic, region, highlightedState) => {
-  const state = getStatePropByAbbr(highlightedState, 'full') || 'U.S.';
-  const isGap = isGapDemographic(demographic);
-  return getLang('MOBILE_SUBLINE', {
-    place: state,
-    region: region,
-    demographic: isGap ?
-      getLang('LABEL_SHORT_' + demographic) + ' students' :
-      getLang('LABEL_' + demographic)  + ' students'
-  })
-}
-
 const DataOptionsDialog = ({
   metric,
   demographic,
@@ -55,7 +39,8 @@ const DataOptionsDialog = ({
   highlightedState,
   onApplySettings,
   sizeFilter,
-  view
+  view,
+  dialogTrigger
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -96,15 +81,11 @@ const DataOptionsDialog = ({
     resetOptions();
   }
 
-  
-
   return (
     <div>
-      <SelectButton
-        text={getLang('TAB_CONCEPT_'+ metric)}
-        subtext={getSubline(demographic, region, highlightedState)}
-        onClick={handleClickOpen}
-      />
+      <div onClick={handleClickOpen}>
+        {dialogTrigger}
+      </div>
       <Dialog fullScreen open={open} onClose={handleCancel} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
@@ -147,7 +128,8 @@ DataOptionsDialog.propTypes = {
   highlightedState: PropTypes.string,
   onApplySettings: PropTypes.func,
   sizeFilter: PropTypes.string,
-  view: PropTypes.string
+  view: PropTypes.string,
+  dialogTrigger: PropTypes.node
 }
 
 const mapStateToProps = (

@@ -32,10 +32,26 @@ import SedaMenu from './SedaMenu';
 import SedaSearch from './SedaSearch';
 import { getLang } from '../../modules/lang';
 import DataOptionsDialog from '../organisms/DataOptions';
-import DataOptionsDialog2 from '../organisms/DataOptions/DataOptionsDialog2';
 import MenuButton from '../atoms/MenuButton';
 import HelpButton from '../molecules/HelpButton';
+import SelectButton from '../organisms/DataOptions/SelectButton';
+import MoreFiltersButton from '../organisms/DataOptions/MoreFiltersButton';
 import { toggleHelp, onMetricChange, onViewChange } from '../../actions';
+import { isGapDemographic } from '../../modules/config';
+import { getStatePropByAbbr } from '../../constants/statesFips';
+
+/** Returns the subtitle for the provided vars */
+const getSubline = (demographic, region, highlightedState) => {
+  const state = getStatePropByAbbr(highlightedState, 'full') || 'U.S.';
+  const isGap = isGapDemographic(demographic);
+  return getLang('MOBILE_SUBLINE', {
+    place: state,
+    region: region,
+    demographic: isGap ?
+      getLang('LABEL_SHORT_' + demographic) + ' students' :
+      getLang('LABEL_' + demographic)  + ' students'
+  })
+}
 
 const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, onMetricChange, view}) => {
   const theme = useTheme();
@@ -43,16 +59,16 @@ const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, o
   return <div className='header-tabs'>
     {
       isAboveSmall ? (
-        <Tabs 
+        <Tabs
           value={metric}
           onChange={(e, metricId) => { onMetricChange(metricId) }}
           classes={{ root: 'tabs__root', indicator: 'tab__indicator' }}
           scrollButtons='off'
           variant="scrollable"
         >
-        { 
+        {
           HEADER.tabs.map((t,i) =>
-            <Tab 
+            <Tab
               key={'tab'+i}
               value={t.id}
               label={
@@ -68,7 +84,15 @@ const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, o
         }
         </Tabs>
       ) : (
-        <DataOptionsDialog view={view} />
+        <DataOptionsDialog
+          view={view}
+          dialogTrigger={
+            <SelectButton
+              text={getLang('TAB_CONCEPT_'+ metric)}
+              subtext={getSubline(demographic, region, highlightedState)}
+            />
+          }
+        />
       )
     }
   </div>
@@ -78,7 +102,10 @@ HeaderPrimary.propTypes = {
   metric: PropTypes.string,
   onMetricChange: PropTypes.func,
   width: PropTypes.string,
-  view: PropTypes.string
+  view: PropTypes.string,
+  region: PropTypes.string,
+  demographic: PropTypes.string,
+  highlightedState: PropTypes.string
 }
 
 /**
@@ -103,7 +130,11 @@ export const HeaderSecondaryControls = ({ region, metric, view }) => {
         by
         <RegionControl />
         { view === 'chart' ?
-          <DataOptionsDialog2 /> :
+          <DataOptionsDialog
+            dialogTrigger={
+              <MoreFiltersButton text='More Filters' />
+            }
+          /> :
           <span>in <HighlightedStateControl /></span>
         }
       </div>
@@ -111,12 +142,12 @@ export const HeaderSecondaryControls = ({ region, metric, view }) => {
 }
 
 const HeaderSecondary = ({
-  view, 
+  view,
   metric,
   helpOpen,
   region,
   onHelpClick,
-  onViewChange, 
+  onViewChange,
 }) => {
   return <div className="header__inner-content">
     <HelpButton
@@ -168,6 +199,8 @@ const SedaHeader = ({
   metric,
   view,
   region,
+  demographic,
+  highlightedState,
   helpOpen,
   onMetricChange,
   onOptionChange,
@@ -181,7 +214,7 @@ const SedaHeader = ({
       <Logo />
     }
     primaryContent={
-      <HeaderPrimary {...{metric, onMetricChange, view}} />
+      <HeaderPrimary {...{metric, onMetricChange, view, region, demographic, highlightedState}} />
     }
     secondaryContent={
       <HeaderSecondary {...{metric, region, view, helpOpen, onViewChange, onHelpClick}} />
@@ -203,6 +236,8 @@ SedaHeader.propTypes = {
   view: PropTypes.string,
   text: PropTypes.string,
   region: PropTypes.string,
+  demographic: PropTypes.string,
+  highlightedState: PropTypes.string,
   controls: PropTypes.array,
   width: PropTypes.string,
   helpOpen: PropTypes.bool,
@@ -221,6 +256,8 @@ const mapStateToProps = (
   view: ownProps.match.params.view,
   metric: ownProps.match.params.metric,
   region: ownProps.match.params.region,
+  demographic: ownProps.match.params.demographic,
+  highlightedState: ownProps.match.params.highlightedState
 })
 
 const mapDispatchToProps = (dispatch) => ({
