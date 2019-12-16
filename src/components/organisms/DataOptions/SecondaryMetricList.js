@@ -23,7 +23,8 @@ export default function SecondaryMetricList({
   onRegionChange,
   onHighlightedStateChange,
   sizeFilter,
-  onSizeFilterChange
+  onSizeFilterChange,
+  view
 }) {
   const classes = useStyles();
 
@@ -74,7 +75,7 @@ export default function SecondaryMetricList({
         </ListItemSecondaryAction>
       </ListItem>
       {
-        region === 'schools' ? null :
+        (region === 'schools' || view === 'map')? null :
           (
             <ListItem>
               <ListItemText

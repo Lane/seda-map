@@ -57,8 +57,6 @@ function Scatterplot({
   const filterDataBySize = () => {
     let dataFilteredBySize = Object.assign({}, data)
     if (largest.length || (largest && !Array.isArray(largest))) {
-      console.log('data: ', data)
-      console.log('largest: ', largest)
       let regionKeys = Object.keys(data[region])
       let newRegion = {}
       regionKeys.map(k => {
@@ -68,14 +66,12 @@ function Scatterplot({
         })
       })
       dataFilteredBySize[region] = newRegion
-      console.log('newData: ', dataFilteredBySize)
       return dataFilteredBySize
     } else {
       return data
     }
   }
-  console.log('highlightedState: ', highlightedState)
-  console.log('sizeFilter: ', sizeFilter)
+
   let dataValue = (sizeFilter === 'all' || highlightedState) ? data : filterDataBySize()
   let regionData = dataValue[region]
 
@@ -99,13 +95,8 @@ function Scatterplot({
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
-    console.log('largest: ', largest)
     if (largest.largest && largest.largest.length) {
-      console.log('dataValue: ', dataValue)
-      console.log('hl: ', hl)
-      // console.log('largest: ', largest)
       let filtered = hl.filter(h => largest.largest.indexOf(h) > -1)
-      console.log('filtered: ', filtered)
       return filtered
     } else {
       return hl.slice(0, 3000)
@@ -118,9 +109,9 @@ function Scatterplot({
   useEffect(() => {
     if (needsData) {
       fetchScatterplotVars(
-        [ 'name' ], 
+        [ 'name' ],
         region,
-        endpoint, 
+        endpoint,
         getBaseVars()[region]
       ).then((data) => {
         onData && onData(data, region);

@@ -75,13 +75,11 @@ const error = (state = false, action) => {
 const largest = (state = [], action) => {
   switch(action.type) {
     case 'LARGEST_LOADED':
-      console.log('largest loaded action: ', action)
       return {
         ...state,
         largest: action.largest
       }
     case 'RESET_SIZE_FILTER':
-      console.log('reset size filter')
       return {
         ...state,
         largest: []

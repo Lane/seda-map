@@ -418,38 +418,43 @@ export const onSizeFilterChange = (size, highlightedState, region) =>
     }
 }
 
-export const onRouteUpdates = (updates = {}) => (dispatch) => {
+export const updateSizeFilter = (updates) => (dispatch) => {
   let params = getParamsFromPathname(window.location.hash.substr(1))
+  let region = updates.region || params.region
+  let size = updates.sizeFilter || params.sizeFilter
+  let view = params.view
   let stateAbbr = updates.highlightedState || params.highlightedState
   stateAbbr = stateAbbr.toUpperCase()
-  let region = updates.region || params.region
-  let size = params.sizeFilter
+  if (view === 'map') {
+    // size filtering currently not possible for map view
+    return;
+  } else if (updates.region === 'schools') {
+    // size filtering currently not possible for schools
+    // reset size filter to default of 'all'
+    updates.sizeFilter = 'all'
+    dispatch({type: 'RESET_SIZE_FILTER'})
+    return;
+  } else {
+    // user has modified some param
+    // we need to fetch the new results, then filter by the previously set size filter
+    dispatch(onSizeFilterChange(size, stateAbbr, region))
+  }
+}
 
+export const onRouteUpdates = (updates = {}) => (dispatch) => {
+  dispatch(updateSizeFilter(updates))
   if (updates.hasOwnProperty('region')) {
     dispatch(setExplorerRegion(updates.region))
-    if (updates.region === 'schools') {
-      // size filtering is not possible for schools
-      updates.sizeFilter = 'all'
-      dispatch({type: 'RESET_SIZE_FILTER'})
-    } else if (!updates.sizeFilter) {
-      // update size filter for new region
-      dispatch(onSizeFilterChange(size, stateAbbr, updates.region))
-    }
   }
   if (updates.hasOwnProperty('highlightedState')) {
     dispatch(setExplorerState(updates.highlightedState))
-    if (!updates.sizeFilter) {
-      dispatch(onSizeFilterChange(size, updates.highlightedState.toUpperCase(), region))
-    }
+    dispatch(onHighlightedStateChange(updates.highlightedState))
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))
   }
   if (updates.hasOwnProperty('sizeFilter')) {
     dispatch(setExplorerSizeFilter(updates.sizeFilter))
-    if (updates.region !== 'schools') {
-      dispatch(onSizeFilterChange(updates.sizeFilter, stateAbbr, region))
-    }
   }
   if (updates.hasOwnProperty('metric')) {
     dispatch(setExplorerMetric(updates.metric))
@@ -465,9 +470,9 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
 
 /**
  * Thunk that updates the region in the route
- * @param {*} region 
+ * @param {*} region
  */
-export const onRegionChange = (region) => 
+export const onRegionChange = (region) =>
   (dispatch, getState) => {
     const routeUpdates = { region };
     // set demographic to 'all' if switching to schools

@@ -37,7 +37,7 @@ import MenuButton from '../atoms/MenuButton';
 import HelpButton from '../molecules/HelpButton';
 import { toggleHelp, onMetricChange, onViewChange } from '../../actions';
 
-const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, onMetricChange}) => {
+const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, onMetricChange, view}) => {
   const theme = useTheme();
   const isAboveSmall = useMediaQuery(theme.breakpoints.up('sm'));
   return <div className='header-tabs'>
@@ -68,7 +68,7 @@ const HeaderPrimary = ({metric = 'avg', region, demographic, highlightedState, o
         }
         </Tabs>
       ) : (
-        <DataOptionsDialog />
+        <DataOptionsDialog view={view} />
       )
     }
   </div>
@@ -78,6 +78,7 @@ HeaderPrimary.propTypes = {
   metric: PropTypes.string,
   onMetricChange: PropTypes.func,
   width: PropTypes.string,
+  view: PropTypes.string
 }
 
 /**
@@ -180,7 +181,7 @@ const SedaHeader = ({
       <Logo />
     }
     primaryContent={
-      <HeaderPrimary {...{metric, onMetricChange }} />
+      <HeaderPrimary {...{metric, onMetricChange, view}} />
     }
     secondaryContent={
       <HeaderSecondary {...{metric, region, view, helpOpen, onViewChange, onHelpClick}} />

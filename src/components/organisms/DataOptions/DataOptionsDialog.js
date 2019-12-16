@@ -42,19 +42,20 @@ const getSubline = (demographic, region, highlightedState) => {
   return getLang('MOBILE_SUBLINE', {
     place: state,
     region: region,
-    demographic: isGap ? 
+    demographic: isGap ?
       getLang('LABEL_SHORT_' + demographic) + ' students' :
       getLang('LABEL_' + demographic)  + ' students'
   })
 }
 
 const DataOptionsDialog = ({
-  metric, 
-  demographic, 
-  region, 
+  metric,
+  demographic,
+  region,
   highlightedState,
   onApplySettings,
-  sizeFilter
+  sizeFilter,
+  view
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -132,6 +133,7 @@ const DataOptionsDialog = ({
           onRegionChange={setRegion}
           onHighlightedStateChange={setHighlightedState}
           onSizeFilterChange={setSizeFilter}
+          view={view}
         />
       </Dialog>
     </div>
@@ -144,7 +146,8 @@ DataOptionsDialog.propTypes = {
   region: PropTypes.string,
   highlightedState: PropTypes.string,
   onApplySettings: PropTypes.func,
-  sizeFilter: PropTypes.string
+  sizeFilter: PropTypes.string,
+  view: PropTypes.string
 }
 
 const mapStateToProps = (
