@@ -225,7 +225,7 @@ const mapStateToProps = (
     lat, 
     lon, 
     locations,
-    highlightedState
+    highlightedState = 'us-all'
   } } }
 ) => {
   return {
@@ -238,7 +238,7 @@ const mapStateToProps = (
     lat, 
     lon, 
     locations, 
-    highlightedState,
+    highlightedState: highlightedState.split('-')[0],
     open: embedOpen,
   }
 }

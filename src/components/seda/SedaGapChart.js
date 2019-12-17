@@ -100,14 +100,14 @@ const mapStateToProps = ({
   scatterplot: { data },
   sections: { hovered },
 },
-{ match: { params: { region, metric, demographic, highlightedState, secondary } } }
+{ match: { params: { region, metric, demographic, highlightedState = 'us-all', secondary } } }
 ) => {
   return ({
     region,
     metric,
     secondary,
     demographic,
-    highlightedState,
+    highlightedState: highlightedState.split('-')[0],
     hovered,
     data,
   })

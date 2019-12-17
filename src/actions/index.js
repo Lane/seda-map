@@ -356,6 +356,7 @@ export const loadFlaggedSchools = () =>
  */
 export const navigateToStateByAbbr = (abbr) =>
   (dispatch, getState) => {
+    console.log('nav to state by abbr')
     const state = getState()
     const vp = getStateViewport(abbr, state.map.viewport);
     return dispatch(onViewportChange(vp, true))
@@ -405,7 +406,6 @@ export const onHighlightedStateChange = (stateAbbr) => (dispatch) => {
   dispatch(updateSizeFilter({ highlightedState: stateAbbr }))
   dispatch(setExplorerState(stateAbbr))
   dispatch(navigateToStateByAbbr(stateAbbr))
-
 }
 
 export const onSizeFilterChange = (size, highlightedState, region) =>
@@ -428,16 +428,7 @@ export const updateSizeFilter = (updates) => (dispatch) => {
   let size = updates.sizeFilter || params.sizeFilter
   let stateAbbr = updates.highlightedState || params.highlightedState
   stateAbbr = stateAbbr.toUpperCase()
-  if (updates.region === 'schools') {
-    // size filtering currently not possible for schools
-    // reset size filter to default of 'all'
-    dispatch({type: 'RESET_SIZE_FILTER'})
-    return;
-  } else {
-    // user has modified some param
-    // we need to fetch the new results, then filter by the (new or previously set) size filter
-    dispatch(onSizeFilterChange(size, stateAbbr, region))
-  }
+  dispatch(onSizeFilterChange(size, stateAbbr, region))
 }
 
 export const onRouteUpdates = (updates = {}) => (dispatch) => {
@@ -447,6 +438,7 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
   }
   if (updates.hasOwnProperty('highlightedState')) {
     dispatch(setExplorerState(updates.highlightedState))
+    dispatch(navigateToStateByAbbr(updates.highlightedState))
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))
@@ -477,9 +469,6 @@ export const onRegionChange = (region) =>
     if (region === 'schools') {
       routeUpdates['demographic'] = 'all';
       routeUpdates['secondary'] = 'frl';
-      // size filtering currently not possible for schools
-      // reset size filter to default of 'all'
-      routeUpdates['sizeFilter'] = 'all';
     } else {
       const secondary = getState()['sections']['gapChartX']
       routeUpdates['secondary'] = secondary;

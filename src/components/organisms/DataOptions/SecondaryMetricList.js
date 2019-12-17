@@ -75,7 +75,7 @@ export default function SecondaryMetricList({
         </ListItemSecondaryAction>
       </ListItem>
       {
-        (region === 'schools' || view === 'map')? null :
+        view === 'map' ? null :
           (
             <ListItem>
               <ListItemText

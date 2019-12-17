@@ -134,7 +134,7 @@ DataOptionsDialog.propTypes = {
 
 const mapStateToProps = (
   state,
-  { match: { params: { region, demographic, metric, highlightedState } } }
+  { match: { params: { region, demographic, metric, highlightedState = 'us-all' } } }
 ) => ({
   region, demographic, metric, highlightedState: highlightedState.split('-')[0], sizeFilter: highlightedState.split('-')[1] || 'all'
 });
