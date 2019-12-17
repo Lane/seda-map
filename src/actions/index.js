@@ -428,38 +428,6 @@ export const updateSizeFilter = (updates) => (dispatch) => {
   let size = updates.sizeFilter || params.sizeFilter
   let stateAbbr = updates.highlightedState || params.highlightedState
   stateAbbr = stateAbbr.toUpperCase()
-  if (updates.region === 'schools') {
-    // size filtering currently not possible for schools
-    // reset size filter to default of 'all'
-    dispatch({type: 'RESET_SIZE_FILTER'})
-    return;
-  } else {
-    // user has modified some param
-    // we need to fetch the new results, then filter by the (new or previously set) size filter
-    dispatch(onSizeFilterChange(size, stateAbbr, region))
-  }
-}
-
-export const onSizeFilterChange = (size, highlightedState, region) =>
-  (dispatch) => {
-    updateRoute({ sizeFilter: size })
-    dispatch(setExplorerSizeFilter(size))
-    if (size === 'all') {
-      dispatch({type: 'RESET_SIZE_FILTER'})
-    } else {
-      let requestAPI = process.env.REACT_APP_DATA_API_URL
-      let requestPath = `/${region}?limit=${size}&asc=0&state=${highlightedState}&sort=all_sz&columns=id`
-      axios.get(`${requestAPI}${requestPath}`)
-        .then(res => dispatch(onDataFilteredBySizeLoaded(res.data.map(d => d.id))))
-    }
-}
-
-export const updateSizeFilter = (updates) => (dispatch) => {
-  let params = getParamsFromPathname(window.location.hash.substr(1))
-  let region = updates.region || params.region
-  let size = updates.sizeFilter || params.sizeFilter
-  let stateAbbr = updates.highlightedState || params.highlightedState
-  stateAbbr = stateAbbr.toUpperCase()
   dispatch(onSizeFilterChange(size, stateAbbr, region))
 }
 
