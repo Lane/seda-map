@@ -39,6 +39,11 @@ const localStorageMiddleware = (store) => (next) => (action) => {
         localStorage.setItem('demographic', action.demographicId);
       }
     }
+    if (action.type === 'SET_EXPLORER_SIZE_FILTER') {
+      if (localStorage.getItem('size-filter') !== action.size) {
+        localStorage.setItem('size-filter', action.size);
+      }
+    }
   }
   return next(action);
 }
@@ -51,6 +56,10 @@ const eventsMap = {
   'SET_EXPLORER_DEMOGRAPHIC': (action) => ({
     event: 'studentTypeSelected',
     studentTypeSelection: getLang('LABEL_' + action.demographicId)
+  }),
+  'SET_EXPLORER_SIZE_FILTER': (action) => ({
+    event: 'sizeFilterSelected',
+    sizeFilterSelection: getLang('LABEL_' + action.size)
   }),
   'SET_EXPLORER_REGION': (action) => ({
     event: 'geoTypeSelected',

@@ -4,7 +4,7 @@ import * as _merge from 'lodash.merge';
 const defaultData = {
   'schools': {},
   'districts': {},
-  'counties': {}
+  'counties': {},
 }
 
 const handleReceivedData = (state, data, region) => {
@@ -72,7 +72,24 @@ const error = (state = false, action) => {
   }
 }
 
-const scatterplot = combineReducers({ data, loaded, error })
+const dataFilteredBySize = (state = {data: []}, action) => {
+  switch(action.type) {
+    case 'DATA_FILTERED_BY_SIZE_LOADED':
+      return {
+        ...state,
+        data: action.data
+      }
+    case 'RESET_SIZE_FILTER':
+      return {
+        ...state,
+        data: []
+      }
+    default:
+      return state
+  }
+}
+
+const scatterplot = combineReducers({ data, loaded, error, dataFilteredBySize })
 
 export default scatterplot;
 

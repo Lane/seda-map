@@ -29,3 +29,11 @@
   right: 0px;
   fill: var(--link);
 }
+
+.MuiButtonBase-root.more-filters-button {
+  color: var(--text2);;
+}
+.MuiButtonBase-root.more-filters-button svg {
+  padding-right: 5px;
+}
+

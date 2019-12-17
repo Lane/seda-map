@@ -238,6 +238,20 @@ export const REGIONS = [
 ];
 
 /**
+ * size filter options for counties and districts
+ */
+ export const SIZE_FILTERS = [
+   {
+     id: '10',
+     label: LANG['LABEL_TOP_10']
+   },
+   {
+     id: '100',
+     label: LANG['LABEL_TOP_100']
+   }
+ ];
+
+/**
  * demographics data is available for
  */
 export const DEMOGRAPHICS = [

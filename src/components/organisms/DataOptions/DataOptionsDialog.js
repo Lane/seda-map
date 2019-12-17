@@ -13,13 +13,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-import SelectButton from './SelectButton';
-import { getLang } from '../../../modules/lang';
+
 import KeyMetricList from './KeyMetricList';
 import SecondaryMetricList from './SecondaryMetricList';
 import { onRouteUpdates } from '../../../actions';
-import { isGapDemographic } from '../../../modules/config';
-import { getStatePropByAbbr } from '../../../constants/statesFips';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -35,25 +32,15 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-/** Returns the subtitle for the provided vars */
-const getSubline = (demographic, region, highlightedState) => {
-  const state = getStatePropByAbbr(highlightedState, 'full') || 'U.S.';
-  const isGap = isGapDemographic(demographic);
-  return getLang('MOBILE_SUBLINE', {
-    place: state,
-    region: region,
-    demographic: isGap ? 
-      getLang('LABEL_SHORT_' + demographic) + ' students' :
-      getLang('LABEL_' + demographic)  + ' students'
-  })
-}
-
 const DataOptionsDialog = ({
-  metric, 
-  demographic, 
-  region, 
+  metric,
+  demographic,
+  region,
   highlightedState,
   onApplySettings,
+  sizeFilter,
+  view,
+  dialogTrigger
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -61,12 +48,14 @@ const DataOptionsDialog = ({
   const [ dialogDem, setDemographic ] = React.useState(demographic);
   const [ dialogRegion, setRegion ] = React.useState(region);
   const [ dialogState, setHighlightedState ] = React.useState(highlightedState);
+  const [ dialogSize, setSizeFilter ] = React.useState(sizeFilter);
 
   const resetOptions = () => {
     setKeyMetric(metric);
     setDemographic(demographic);
     setRegion(region);
     setHighlightedState(highlightedState);
+    setSizeFilter(sizeFilter)
   }
 
   const handleClickOpen = () => {
@@ -82,6 +71,7 @@ const DataOptionsDialog = ({
     if (dialogDem !== demographic) { updates['demographic'] = dialogDem }
     if (dialogRegion !== region) { updates['region'] = dialogRegion }
     if (dialogState !== highlightedState) { updates['highlightedState'] = dialogState }
+    if (dialogSize !== sizeFilter) { updates['sizeFilter'] = dialogSize }
     onApplySettings(updates)
   }
 
@@ -91,15 +81,11 @@ const DataOptionsDialog = ({
     resetOptions();
   }
 
-  
-
   return (
     <div>
-      <SelectButton
-        text={getLang('TAB_CONCEPT_'+ metric)}
-        subtext={getSubline(demographic, region, highlightedState)}
-        onClick={handleClickOpen}
-      />
+      <div onClick={handleClickOpen}>
+        {dialogTrigger}
+      </div>
       <Dialog fullScreen open={open} onClose={handleCancel} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
@@ -123,9 +109,12 @@ const DataOptionsDialog = ({
           demographic={dialogDem}
           region={dialogRegion}
           highlightedState={dialogState}
+          sizeFilter={dialogSize}
           onDemographicChange={setDemographic}
           onRegionChange={setRegion}
           onHighlightedStateChange={setHighlightedState}
+          onSizeFilterChange={setSizeFilter}
+          view={view}
         />
       </Dialog>
     </div>
@@ -138,13 +127,16 @@ DataOptionsDialog.propTypes = {
   region: PropTypes.string,
   highlightedState: PropTypes.string,
   onApplySettings: PropTypes.func,
+  sizeFilter: PropTypes.string,
+  view: PropTypes.string,
+  dialogTrigger: PropTypes.node
 }
 
 const mapStateToProps = (
-  state, 
+  state,
   { match: { params: { region, demographic, metric, highlightedState } } }
 ) => ({
-  region, demographic, metric, highlightedState
+  region, demographic, metric, highlightedState: highlightedState.split('-')[0], sizeFilter: highlightedState.split('-')[1] || 'all'
 });
 
 const mapDispatchToProps = (dispatch) => ({

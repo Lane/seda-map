@@ -199,6 +199,11 @@ const LANG = {
   'LABEL_REGION': 'Region',
   'LABEL_HIGHLIGHTED_STATE': 'Highlighted State',
 
+  // Size Filter Labels
+  'LABEL_SIZE_FILTER': 'Size',
+  'LABEL_TOP_10': 'Top 10',
+  'LABEL_TOP_100': 'Top 100',
+
   'LABEL_GAP_INPUT': '$[dem1] - $[dem2] gap in',
 
   // Tooltips

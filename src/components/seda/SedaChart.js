@@ -16,6 +16,7 @@ const SedaExplorerChart = ({
   metric,
   demographic,
   highlightedState,
+  sizeFilter,
   hovered,
   data,
   onData,
@@ -23,6 +24,7 @@ const SedaExplorerChart = ({
   onHover,
   onClick,
   onError,
+  dataFilteredBySize
 }) => {
   const vars = getScatterplotVars(region, metric, demographic);
   const isVersus = isVersusFromVarNames(vars.xVar, vars.yVar);
@@ -33,12 +35,14 @@ const SedaExplorerChart = ({
       data,
       variant: 'map',
       highlightedState: getStateFipsFromAbbr(highlightedState),
+      sizeFilter,
       className: isVersus ? 'scatterplot--versus': '',
       onData,
       onReady,
       onHover,
       onClick,
-      onError
+      onError,
+      dataFilteredBySize
     }}>
       <ScatterplotHeading {...{...vars, region, highlightedState}} />
       <SedaLocationMarkers 
@@ -68,6 +72,7 @@ SedaExplorerChart.propTypes = {
   metric: PropTypes.string,
   demographic: PropTypes.string,
   highlightedState: PropTypes.string,
+  sizeFilter: PropTypes.string,
   hovered: PropTypes.object,
   data: PropTypes.object,
   onData: PropTypes.func,
@@ -75,10 +80,11 @@ SedaExplorerChart.propTypes = {
   onHover: PropTypes.func,
   onClick: PropTypes.func,
   onError: PropTypes.func,
+  dataFilteredBySize: PropTypes.array
 }
 
-const mapStateToProps = ({ 
-  scatterplot: { data },
+const mapStateToProps = ({
+  scatterplot: { data, dataFilteredBySize },
   sections: { hovered },
 },
 { match: { params: { region, metric, secondary, demographic, highlightedState } } }
@@ -88,9 +94,11 @@ const mapStateToProps = ({
     metric,
     secondary,
     demographic,
-    highlightedState,
+    highlightedState: highlightedState.split('-')[0],
+    sizeFilter: highlightedState.split('-')[1],
     hovered,
     data,
+    dataFilteredBySize: dataFilteredBySize.data
   })
 }
 

@@ -129,7 +129,7 @@ const mapStateToProps = ({
   map: { idMap, viewport },
   sections: { hovered },
 },
-{ match: { params: { view, region, metric, demographic, highlightedState = 'us', ...params } } }
+{ match: { params: { view, region, metric, demographic, highlightedState = 'us-all', ...params } } }
 ) => {
   return ({
     view,
@@ -137,7 +137,8 @@ const mapStateToProps = ({
     region,
     metric,
     demographic,
-    highlightedState,
+    highlightedState: highlightedState.split('-')[0],
+    sizeFilter: highlightedState.split('-')[1],
     selected,
     hovered,
     legendType,

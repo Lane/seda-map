@@ -16,7 +16,8 @@ const DEFAULT_ROUTEVARS = [
   'zoom', 
   'lat', 
   'lon', 
-  'locations' 
+  'locations',
+  'sizeFilter'
 ];
 
 /**
@@ -142,10 +143,18 @@ export const removeLocationFromPathname = (pathname, locationId) => {
 export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
   return path.substring(1, path.length)
     .split('/')
-    .reduce((acc, curr, i) => ({
-      ...acc,
-      [routeVars[i]]: curr
-    }), {})
+    .reduce(
+      (acc, curr, i) => {
+        if (routeVars[i] === 'highlightedState') {
+          let selectedState = curr.split('-')[0]
+          let sizeFilter = curr.split('-')[1] || 'all'
+          return ({ ...acc, highlightedState: selectedState, sizeFilter})
+        } else {
+          return ({ ...acc, [routeVars[i]]: curr})
+        }
+      },
+      {}
+    )
 }
 
 
@@ -157,6 +166,9 @@ export const getParamsFromPathname = (path, routeVars = DEFAULT_ROUTEVARS) => {
  */
 export const getPathnameFromParams = (params, updates = {}, routeVars = DEFAULT_ROUTEVARS) => {
   const matches = { ...params, ...updates };
+  let sizeFilter = matches.sizeFilter || 'all'
+  matches.highlightedState = `${matches.highlightedState}-${sizeFilter}`
+  delete matches.sizeFilter
   return '/' + routeVars
     .filter(p => !!matches[p])
     .map(p => matches[p]).join('/')

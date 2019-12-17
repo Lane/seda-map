@@ -43,6 +43,7 @@ function Scatterplot({
   className,
   region,
   highlightedState,
+  sizeFilter,
   variant,
   freeze,
   children,
@@ -50,20 +51,37 @@ function Scatterplot({
   onClick,
   onData,
   onReady,
-  onError
+  onError,
+  dataFilteredBySize
 }) {
 
-  const regionData = data[region]
-  
+  const makeFilteredDataObject = () => {
+    // filters the "data" object, based on the set of id's inside the "dataFilteredBySize" array
+    let filteredDataObject = Object.assign({}, data)
+    let regionKeys = Object.keys(data[region])
+    let filteredRegion = {}
+    regionKeys.forEach(k => {
+      filteredRegion[k] = {}
+      dataFilteredBySize.forEach(id => {
+        filteredRegion[k][id] = data[region][k][id]
+      })
+    })
+    filteredDataObject[region] = filteredRegion
+    return filteredDataObject
+  }
+
+  let dataValue = (sizeFilter === 'all' || highlightedState) ? data : makeFilteredDataObject()
+  let regionData = dataValue[region]
+
   const stateFips = getStateFipsFromAbbr(highlightedState);
 
   // memoize scatterplot options
   const scatterplotOptions = useMemo(
     () => {
       const options = getScatterplotOptions(
-        variant, 
-        regionData, 
-        { xVar, yVar, zVar }, 
+        variant,
+        regionData,
+        { xVar, yVar, zVar },
         highlightedState,
         region
       )
@@ -75,9 +93,13 @@ function Scatterplot({
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
-    // limit to 3000
-    return hl.slice(0, 3000)
-  }, [highlightedState, regionData]);
+    if (dataFilteredBySize.length) {
+      let filtered = hl.filter(h => dataFilteredBySize.indexOf(h) > -1)
+      return filtered
+    } else {
+      return hl.slice(0, 3000)
+    }
+  }, [highlightedState, regionData, dataFilteredBySize]);
 
   const needsData = !data || !data[region] || !data['name']
   // fetch base vars for region if they haven't already been fetched
@@ -85,9 +107,9 @@ function Scatterplot({
   useEffect(() => {
     if (needsData) {
       fetchScatterplotVars(
-        [ 'name' ], 
+        [ 'name' ],
         region,
-        endpoint, 
+        endpoint,
         getBaseVars()[region]
       ).then((data) => {
         onData && onData(data, region);
@@ -102,9 +124,9 @@ function Scatterplot({
   useEffect(() => {
     if (!freeze && region === 'schools' && highlightedState && highlightedState !== 'us') {
       fetchScatterplotVars(
-        [ xVar, yVar, zVar ], 
-        'schools', 
-        endpoint, 
+        [ xVar, yVar, zVar ],
+        'schools',
+        endpoint,
         getBaseVars()['schools'],
         highlightedState
       ).then((data) => {
@@ -115,16 +137,17 @@ function Scatterplot({
   // disable lint, this doesn't need to fire when onData changes
   // eslint-disable-next-line
   }, [xVar, yVar, zVar, region, highlightedState, freeze])
-  
+
   const ariaLabel = getLang('UI_CHART_SR', {
     region,
     xVar: getLabelForVarName(xVar),
     yVar: getLabelForVarName(yVar)
   })
+
   return (
-    <div 
-      role="img" 
-      aria-label={ariaLabel} 
+    <div
+      role="img"
+      aria-label={ariaLabel}
       className={classNames('scatterplot', className)}
     >
       <SedaScatterplot
@@ -137,7 +160,7 @@ function Scatterplot({
           onClick,
           onData,
           onError,
-          data,
+          data: dataValue,
           highlighted,
           theme,
           freeze,
@@ -179,6 +202,7 @@ Scatterplot.propTypes = {
   region: PropTypes.string,
   data: PropTypes.object,
   highlightedState: PropTypes.string,
+  sizeFilter: PropTypes.string,
   selected: PropTypes.array,
   hovered: PropTypes.object,
   variant: PropTypes.string,
@@ -190,6 +214,7 @@ Scatterplot.propTypes = {
   onError: PropTypes.func,
   freeze: PropTypes.bool,
   error: PropTypes.string,
+  dataFilteredBySize: PropTypes.array
 }
 
 export default Scatterplot

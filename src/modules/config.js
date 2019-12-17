@@ -11,7 +11,8 @@ import {
   NO_DATA_COLOR,
   REGION_DOMAINS,
   DOT_SIZES,
-  FUNC_VARS
+  FUNC_VARS,
+  SIZE_FILTERS
 } from '../constants/dataOptions';
 import * as scale from 'd3-scale';
 import { interpolateRgbBasis } from 'd3-interpolate';
@@ -38,7 +39,11 @@ export const getChoroplethColorAtValue = interpolateRgbBasis(CHOROPLETH_COLORS)
 
 export const getColorStep = (stepNum) => getChoroplethColors()[stepNum]
 
-
+/**
+ * Gets the configuation for size filters
+ */
+export const getSizeFilterSelectOptions = () =>
+  SIZE_FILTERS.map(f => ({id: f.id, label: f.label}))
 
 /**
  * Gets the configuation for regions
