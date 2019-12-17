@@ -15,6 +15,7 @@ import { InputAdornment, IconButton } from '@material-ui/core';
 import CopyIcon from '@material-ui/icons/FileCopy';
 import copy from 'copy-to-clipboard';
 import { toggleEmbedDialog } from '../../../actions';
+import { onShare } from '../Share/actions';
 
 const BASE_URL = `${window.location.origin}${window.location.pathname}`;
 
@@ -82,7 +83,7 @@ const getEmbedCode = (link) => {
   return `<iframe src="${link}" style="width:720px;height:405px;max-width:100%;" frameborder="0"></iframe>`
 }
 
-function EmbedDialog({open, onClose, secondaryChart, ...rest}) {
+function EmbedDialog({open, onClose, onCopy, secondaryChart, ...rest}) {
   const [ copied, setCopied ] = React.useState('');
   const mapLink = getMapEmbedLink(rest);
   const chartLink = getChartEmbedLink(rest);
@@ -128,7 +129,7 @@ function EmbedDialog({open, onClose, secondaryChart, ...rest}) {
                 <IconButton
                   edge="end"
                   aria-label={ getLang('EMBED_COPY_LABEL') }
-                  onClick={() => { copy(mapEmbedCode); setCopied('map'); }}
+                  onClick={() => { copy(mapEmbedCode); setCopied('map'); onCopy(); }}
                 >
                   <CopyIcon />
                 </IconButton>
@@ -157,7 +158,7 @@ function EmbedDialog({open, onClose, secondaryChart, ...rest}) {
                 <IconButton
                   edge="end"
                   aria-label={ getLang('EMBED_COPY_LABEL') }
-                  onClick={() => { copy(chartEmbedCode); setCopied('chart'); }}
+                  onClick={() => { copy(chartEmbedCode); setCopied('chart'); onCopy(); }}
                 >
                   <CopyIcon />
                 </IconButton>
@@ -246,6 +247,9 @@ const mapStateToProps = (
 const mapDispatchToProps = (dispatch) => ({
   onClose: () => {
     dispatch(toggleEmbedDialog(false))
+  },
+  onCopy: () => {
+    dispatch(onShare(window.location.href, 'embed'));
   }
 })
 
