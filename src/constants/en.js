@@ -203,6 +203,7 @@ const LANG = {
   'LABEL_SIZE_FILTER': 'Size',
   'LABEL_TOP_10': 'Top 10',
   'LABEL_TOP_100': 'Top 100',
+  'LABEL_TOP_1000': 'Top 1000',
 
   'LABEL_GAP_INPUT': '$[dem1] - $[dem2] gap in',
 

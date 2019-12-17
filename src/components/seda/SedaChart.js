@@ -87,7 +87,7 @@ const mapStateToProps = ({
   scatterplot: { data, dataFilteredBySize },
   sections: { hovered },
 },
-{ match: { params: { region, metric, secondary, demographic, highlightedState } } }
+{ match: { params: { region, metric, secondary, demographic, highlightedState = 'us-all' } } }
 ) => {
   return ({
     region,

@@ -8,13 +8,13 @@ import { getScatterplotVars } from '../../modules/config'
 const mapStateToProps = ({
   scatterplot: { data, error }
 }, {
-  match: { params: { region, highlightedState, metric, demographic, secondary }}
+  match: { params: { region, highlightedState = 'us-all', metric, demographic, secondary }}
 }) => ({
   ...getScatterplotVars(region, metric, demographic),
   data,
   region,
   error,
-  highlightedState,
+  highlightedState: highlightedState.split('-')[0]
 })
 
 export default compose(

@@ -154,14 +154,14 @@ const mapStateToProps = ({
   scatterplot: { data },
   sections: { hovered },
 },
-{ match: { params: { xVar, yVar, zVar, region, highlightedState, locations } } }
+{ match: { params: { xVar, yVar, zVar, region, highlightedState = 'us-all', locations } } }
 ) => {
   return ({
     region,
     xVar,
     yVar,
     zVar,
-    highlightedState,
+    highlightedState: highlightedState.split('-')[0],
     hovered,
     data,
     locations

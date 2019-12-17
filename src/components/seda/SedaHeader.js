@@ -121,8 +121,14 @@ export const HeaderSecondaryControls = ({ region, metric, view }) => {
       <div className="menu-sentence">
         Showing data by 
         <RegionControl /> 
-        for 
-        <HighlightedStateControl />
+        { (view === 'chart'  || view === 'split') ?
+          <DataOptionsDialog
+            dialogTrigger={
+              <MoreFiltersButton text='More Filters' />
+            }
+          /> :
+          <span>for <HighlightedStateControl /></span>
+        }
       </div> :
       <div className="menu-sentence">
         Showing 

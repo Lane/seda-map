@@ -93,7 +93,7 @@ function Scatterplot({
   // memoize highlighted state IDs for the scatterplot
   const highlighted = useMemo(() => {
     const hl = getStateHighlights(highlightedState, regionData)
-    if (dataFilteredBySize.length) {
+    if (dataFilteredBySize && dataFilteredBySize.length) {
       let filtered = hl.filter(h => dataFilteredBySize.indexOf(h) > -1)
       return filtered
     } else {

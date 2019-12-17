@@ -428,16 +428,7 @@ export const updateSizeFilter = (updates) => (dispatch) => {
   let size = updates.sizeFilter || params.sizeFilter
   let stateAbbr = updates.highlightedState || params.highlightedState
   stateAbbr = stateAbbr.toUpperCase()
-  if (updates.region === 'schools') {
-    // size filtering currently not possible for schools
-    // reset size filter to default of 'all'
-    dispatch({type: 'RESET_SIZE_FILTER'})
-    return;
-  } else {
-    // user has modified some param
-    // we need to fetch the new results, then filter by the (new or previously set) size filter
-    dispatch(onSizeFilterChange(size, stateAbbr, region))
-  }
+  dispatch(onSizeFilterChange(size, stateAbbr, region))
 }
 
 export const onRouteUpdates = (updates = {}) => (dispatch) => {
@@ -447,6 +438,7 @@ export const onRouteUpdates = (updates = {}) => (dispatch) => {
   }
   if (updates.hasOwnProperty('highlightedState')) {
     dispatch(setExplorerState(updates.highlightedState))
+    dispatch(navigateToStateByAbbr(updates.highlightedState))
   }
   if (updates.hasOwnProperty('demographic')) {
     dispatch(setExplorerDemographic(updates.demographic))

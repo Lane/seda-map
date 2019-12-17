@@ -21,6 +21,7 @@ import { getLang } from '../../modules/lang';
 import BubbleChartIcon from '@material-ui/icons/BubbleChart';
 import EmbedDialog from '../organisms/Embed/EmbedDialog';
 import { ShareLinkDialog } from '../organisms/Share';
+import { updateRoute } from '../../modules/router';
 
 
 const Charts = ({
@@ -77,6 +78,8 @@ const ExplorerView = ({
   helpOpen,
   view,
   demographic,
+  highlightedState,
+  sizeFilter,
   gapChart,
   region,
   canRender,
@@ -86,11 +89,15 @@ const ExplorerView = ({
   onToggleGapChart,
   loadFlaggedSchools
 }) => {
+
   // use state to track if the intro is on / off
   // const [introOn, setIntroOn] = useState(false);
 
   // load locations and flag potential layout change afterwards
   useEffect(() => {
+    if (!sizeFilter || sizeFilter === highlightedState) {
+      updateRoute({sizeFilter: 'all'})
+    }
     loadRouteLocations(locations, region)
       .then(()=> {
         // set map size when locations load
@@ -175,7 +182,7 @@ ExplorerView.propTypes = {
 const mapStateToProps = 
   (
     { selected, ui: { helpOpen }, active, sections: { gapChart } },
-    { match: { params: { metric, locations, region, view, demographic } } }
+    { match: { params: { metric, locations, region, view, demographic, highlightedState = 'us-all' } } }
   ) => ({
     gapChart,
     view,
@@ -183,6 +190,8 @@ const mapStateToProps =
     helpOpen,
     region,
     locations,
+    highlightedState: highlightedState.split('-')[0],
+    sizeFilter: highlightedState.split('-')[0],
     selected: selected[region],
     locationActive: Boolean(active),
     canRender: Boolean(metric) && Boolean(demographic) && Boolean(view) && Boolean(region),
