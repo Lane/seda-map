@@ -248,6 +248,10 @@ export const REGIONS = [
    {
      id: '100',
      label: LANG['LABEL_TOP_100']
+   },
+   {
+     id: '1000',
+     label: LANG['LABEL_TOP_1000']
    }
  ];
 

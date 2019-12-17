@@ -356,7 +356,6 @@ export const loadFlaggedSchools = () =>
  */
 export const navigateToStateByAbbr = (abbr) =>
   (dispatch, getState) => {
-    console.log('nav to state by abbr')
     const state = getState()
     const vp = getStateViewport(abbr, state.map.viewport);
     return dispatch(onViewportChange(vp, true))
